@@ -14,14 +14,12 @@ export const authLogin = (data: LoginRequest): Promise<LoginResponse> =>
   apiClient<LoginResponse>(`${AUTH_BASE}/login`, {
     method: "POST",
     body: data,
-    auth: false,
   })
 
 export const authRegister = (data: RegisterRequest): Promise<LoginResponse> =>
   apiClient<LoginResponse>(`${AUTH_BASE}/register`, {
     method: "POST",
     body: data,
-    auth: false,
   })
 
 export const authForgotPassword = (
@@ -30,7 +28,6 @@ export const authForgotPassword = (
   apiClient<{ message: string }>(`${AUTH_BASE}/forgot-password`, {
     method: "POST",
     body: data,
-    auth: false,
   })
 
 export const authResetPassword = (
@@ -39,7 +36,6 @@ export const authResetPassword = (
   apiClient<{ message: string }>(`${AUTH_BASE}/reset-password`, {
     method: "POST",
     body: data,
-    auth: false,
   })
 
 export const authMagicLink = (
@@ -48,12 +44,10 @@ export const authMagicLink = (
   apiClient<{ message: string }>(`${AUTH_BASE}/magic-link`, {
     method: "POST",
     body: data,
-    auth: false,
   })
 
 export const authMagicLinkVerify = (token: string): Promise<LoginResponse> =>
   apiClient<LoginResponse>(`${AUTH_BASE}/magic-link/verify`, {
     method: "POST",
     body: { token },
-    auth: false,
   })

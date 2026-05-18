@@ -5,6 +5,7 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useState,
   useSyncExternalStore,
 } from "react"
 import { useRouter } from "next/navigation"
@@ -13,16 +14,18 @@ import {
   AUTH_ROUTES,
   ROLE_DASHBOARD_MAP,
 } from "@/shared/constants/routes.constants"
-import { clearTokens, getAccessToken, setTokens } from "@/shared/lib/api-client"
+import { ApiError } from "@/shared/lib/api-client"
 import { authGetMe, authLogout } from "@/shared/services/auth-session.service"
 import type { User } from "@/shared/types/auth.types"
+
+const HTTP_UNAUTHORIZED = 401
 
 const USER_STORAGE_KEY = "rentdesk_user"
 
 type AuthContextValue = {
   user: User | null
   isLoading: boolean
-  login: (user: User, accessToken: string, refreshToken: string) => void
+  login: (user: User) => void
   logout: () => void
 }
 
@@ -83,11 +86,17 @@ const setStoredUser = (user: User | null) => {
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const user = useSyncExternalStore(subscribe, getStoredUser, getServerSnapshot)
   const router = useRouter()
+  const [isReady, setIsReady] = useState(false)
 
-  // Validate session on mount if tokens exist
+  // Signal that client has mounted and localStorage values are available
   useEffect(() => {
-    const token = getAccessToken()
-    if (!token) return
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional: transitions from SSR loading to client-ready
+    setIsReady(true)
+  }, [])
+
+  // Validate session on mount via httpOnly cookie (only if we have a cached user)
+  useEffect(() => {
+    if (!getStoredUser()) return
 
     let cancelled = false
     authGetMe()
@@ -96,10 +105,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           setStoredUser(freshUser)
         }
       })
-      .catch(() => {
+      .catch((err) => {
         if (!cancelled) {
-          clearTokens()
-          setStoredUser(null)
+          const isUnauthorized =
+            err instanceof ApiError && err.statusCode === HTTP_UNAUTHORIZED
+          if (isUnauthorized) {
+            setStoredUser(null)
+          }
         }
       })
 
@@ -109,8 +121,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, [])
 
   const login = useCallback(
-    (loggedInUser: User, accessToken: string, refreshToken: string) => {
-      setTokens(accessToken, refreshToken)
+    (loggedInUser: User) => {
       setStoredUser(loggedInUser)
       router.push(ROLE_DASHBOARD_MAP[loggedInUser.role])
     },
@@ -118,16 +129,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   )
 
   const logout = useCallback(() => {
-    // Fire-and-forget server logout
     authLogout().catch(() => {})
-    clearTokens()
     setStoredUser(null)
     router.push(AUTH_ROUTES.LOGIN)
   }, [router])
 
   const value = useMemo(
-    () => ({ user, isLoading: false, login, logout }),
-    [user, login, logout]
+    () => ({ user, isLoading: !isReady, login, logout }),
+    [user, isReady, login, logout]
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

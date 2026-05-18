@@ -16,7 +16,7 @@ export default function RegisterPage() {
     setError(null)
     try {
       const response = await authRegister(values)
-      login(response.user, response.accessToken, response.refreshToken)
+      login(response.user)
     } catch (err) {
       setError(err instanceof Error ? err.message : "Registration failed")
     }

@@ -1,26 +1,6 @@
 import { env } from "@/shared/config/env"
 
-const TOKEN_KEY = "rentdesk_access_token"
-const REFRESH_KEY = "rentdesk_refresh_token"
 const HTTP_UNAUTHORIZED = 401
-
-// ─── Token storage ───────────────────────────────────────────────────────────
-
-export const getAccessToken = (): string | null =>
-  typeof window !== "undefined" ? localStorage.getItem(TOKEN_KEY) : null
-
-export const getRefreshToken = (): string | null =>
-  typeof window !== "undefined" ? localStorage.getItem(REFRESH_KEY) : null
-
-export const setTokens = (accessToken: string, refreshToken: string) => {
-  localStorage.setItem(TOKEN_KEY, accessToken)
-  localStorage.setItem(REFRESH_KEY, refreshToken)
-}
-
-export const clearTokens = () => {
-  localStorage.removeItem(TOKEN_KEY)
-  localStorage.removeItem(REFRESH_KEY)
-}
 
 // ─── Case conversion ─────────────────────────────────────────────────────────
 
@@ -69,36 +49,20 @@ type RequestOptions = {
   method?: string
   body?: unknown
   headers?: Record<string, string>
-  auth?: boolean
 }
 
 let isRefreshing = false
 let refreshPromise: Promise<boolean> | null = null
 
 const attemptRefresh = async (): Promise<boolean> => {
-  const refreshToken = getRefreshToken()
-  if (!refreshToken) return false
-
   try {
     const res = await fetch(`${env.NEXT_PUBLIC_API_URL}/api/v1/auth/refresh`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ refresh_token: refreshToken }),
+      credentials: "include",
     })
 
-    if (!res.ok) {
-      clearTokens()
-      return false
-    }
-
-    const data = (await res.json()) as {
-      access_token: string
-      refresh_token: string
-    }
-    setTokens(data.access_token, data.refresh_token)
-    return true
+    return res.ok
   } catch {
-    clearTokens()
     return false
   }
 }
@@ -107,28 +71,22 @@ export const apiClient = async <T>(
   path: string,
   options: RequestOptions = {}
 ): Promise<T> => {
-  const { method = "GET", body, headers = {}, auth = true } = options
+  const { method = "GET", body, headers = {} } = options
 
   const requestHeaders: Record<string, string> = {
     "Content-Type": "application/json",
     ...headers,
   }
 
-  if (auth) {
-    const token = getAccessToken()
-    if (token) {
-      requestHeaders["Authorization"] = `Bearer ${token}`
-    }
-  }
-
   const res = await fetch(`${env.NEXT_PUBLIC_API_URL}${path}`, {
     method,
     headers: requestHeaders,
+    credentials: "include",
     ...(body !== undefined && { body: JSON.stringify(toSnake(body)) }),
   })
 
-  // Handle 401 with token refresh
-  if (res.status === HTTP_UNAUTHORIZED && auth) {
+  // Handle 401 with cookie-based token refresh
+  if (res.status === HTTP_UNAUTHORIZED) {
     if (!isRefreshing) {
       isRefreshing = true
       refreshPromise = attemptRefresh().finally(() => {
@@ -139,15 +97,11 @@ export const apiClient = async <T>(
 
     const refreshed = await refreshPromise
     if (refreshed) {
-      // Retry the original request with new token
-      const newToken = getAccessToken()
-      if (newToken) {
-        requestHeaders["Authorization"] = `Bearer ${newToken}`
-      }
-
+      // Retry the original request — new cookies are set automatically
       const retryRes = await fetch(`${env.NEXT_PUBLIC_API_URL}${path}`, {
         method,
         headers: requestHeaders,
+        credentials: "include",
         ...(body !== undefined && { body: JSON.stringify(toSnake(body)) }),
       })
 
@@ -163,8 +117,7 @@ export const apiClient = async <T>(
       return toCamel(await retryRes.json()) as T
     }
 
-    // Refresh failed — clear and throw
-    clearTokens()
+    // Refresh failed
     throw new ApiError(
       HTTP_UNAUTHORIZED,
       "Session expired. Please sign in again."
