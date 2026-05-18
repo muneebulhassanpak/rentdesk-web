@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useState } from "react"
 import { useRouter } from "next/navigation"
 
 import { FileText, Plus } from "lucide-react"
@@ -19,12 +19,11 @@ import {
 } from "@/shared/components/ui/select"
 import { LEASE_ROUTES } from "@/shared/constants/routes.constants"
 import { useAuth } from "@/shared/hooks/use-auth.hook"
-import type { Lease, LeaseStatus } from "@/shared/types/lease.types"
+import type { LeaseStatus } from "@/shared/types/lease.types"
 import { LEASE_STATUS_LABELS } from "@/shared/types/lease.types"
-import type { PaginatedResponse } from "@/shared/types/property.types"
 
 import { leaseColumns } from "../components/lease-columns"
-import { getLeases, getPropertyOptions } from "../services/leases.service"
+import { useLeases, usePropertyOptions } from "../hooks/use-leases.hook"
 
 const ALL_STATUSES = "all"
 const ALL_PROPERTIES = "all"
@@ -32,44 +31,20 @@ const ALL_PROPERTIES = "all"
 export default function LeaseListPage() {
   const router = useRouter()
   const { user } = useAuth()
-  const [result, setResult] = useState<PaginatedResponse<Lease> | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
   const [search, setSearch] = useState("")
   const [statusFilter, setStatusFilter] = useState<string>(ALL_STATUSES)
   const [propertyFilter, setPropertyFilter] = useState<string>(ALL_PROPERTIES)
   const [page, setPage] = useState(0)
-  const [propertyOptions, setPropertyOptions] = useState<
-    { value: string; label: string }[]
-  >([])
 
-  useEffect(() => {
-    getPropertyOptions().then(setPropertyOptions)
-  }, [])
+  const { data: result, isLoading } = useLeases(user?.orgId ?? "", {
+    search: search || undefined,
+    status:
+      statusFilter !== ALL_STATUSES ? (statusFilter as LeaseStatus) : undefined,
+    propertyId: propertyFilter !== ALL_PROPERTIES ? propertyFilter : undefined,
+    page: page + 1,
+  })
 
-  useEffect(() => {
-    if (!user) return
-    let cancelled = false
-
-    getLeases(user.orgId, {
-      search: search || undefined,
-      status:
-        statusFilter !== ALL_STATUSES
-          ? (statusFilter as LeaseStatus)
-          : undefined,
-      propertyId:
-        propertyFilter !== ALL_PROPERTIES ? propertyFilter : undefined,
-      page: page + 1,
-    }).then((data) => {
-      if (!cancelled) {
-        setResult(data)
-        setIsLoading(false)
-      }
-    })
-
-    return () => {
-      cancelled = true
-    }
-  }, [user, search, statusFilter, propertyFilter, page])
+  const { data: propertyOptions = [] } = usePropertyOptions()
 
   const handleSearchChange = useCallback((value: string) => {
     setSearch(value)

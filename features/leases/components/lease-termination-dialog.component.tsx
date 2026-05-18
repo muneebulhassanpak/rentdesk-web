@@ -18,30 +18,30 @@ import { Input } from "@/shared/components/ui/input"
 import { Label } from "@/shared/components/ui/label"
 import { Textarea } from "@/shared/components/ui/textarea"
 
+import { useTerminateLease } from "../hooks/use-leases.hook"
 import {
   type TerminateLeaseFormValues,
   terminateLeaseSchema,
 } from "../schemas/lease.schema"
-import { terminateLease } from "../services/leases.service"
 
 type LeaseTerminationDialogProps = {
   open: boolean
   onOpenChange: (open: boolean) => void
   leaseId: string
-  onTerminated: () => void
 }
 
 export const LeaseTerminationDialog = ({
   open,
   onOpenChange,
   leaseId,
-  onTerminated,
 }: LeaseTerminationDialogProps) => {
+  const terminateMutation = useTerminateLease(leaseId)
+
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<TerminateLeaseFormValues>({
     resolver: zodResolver(terminateLeaseSchema),
     defaultValues: {
@@ -53,11 +53,10 @@ export const LeaseTerminationDialog = ({
 
   const onSubmit = async (values: TerminateLeaseFormValues) => {
     try {
-      await terminateLease(leaseId, values)
+      await terminateMutation.mutateAsync(values)
       toast.success("Lease terminated successfully")
       reset()
       onOpenChange(false)
-      onTerminated()
     } catch (err) {
       toast.error(
         err instanceof Error ? err.message : "Failed to terminate lease"
@@ -131,7 +130,11 @@ export const LeaseTerminationDialog = ({
             >
               Cancel
             </Button>
-            <Button type="submit" variant="destructive" loading={isSubmitting}>
+            <Button
+              type="submit"
+              variant="destructive"
+              loading={terminateMutation.isPending}
+            >
               Terminate Lease
             </Button>
           </DialogFooter>

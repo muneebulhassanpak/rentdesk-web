@@ -1,6 +1,5 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/navigation"
 
@@ -25,14 +24,14 @@ import { LEASE_ROUTES } from "@/shared/constants/routes.constants"
 import type { LeaseDetail } from "@/shared/types/lease.types"
 
 import {
+  useLease,
+  useTenantOptions,
+  useUpdateLease,
+} from "../hooks/use-leases.hook"
+import {
   type EditLeaseFormValues,
   editLeaseSchema,
 } from "../schemas/lease.schema"
-import {
-  getLease,
-  getTenantOptions,
-  updateLease,
-} from "../services/leases.service"
 
 const MAX_DUE_DAY = 28
 
@@ -41,17 +40,7 @@ type LeaseEditPageProps = {
 }
 
 export default function LeaseEditPage({ leaseId }: LeaseEditPageProps) {
-  const [lease, setLease] = useState<LeaseDetail | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(() => {
-    const load = async () => {
-      const data = await getLease(leaseId)
-      setLease(data)
-      setIsLoading(false)
-    }
-    load()
-  }, [leaseId])
+  const { data: lease, isLoading } = useLease(leaseId)
 
   if (isLoading) {
     return (
@@ -109,20 +98,15 @@ type LeaseEditFormProps = {
 
 function LeaseEditForm({ lease, leaseId }: LeaseEditFormProps) {
   const router = useRouter()
-  const [tenantOptions, setTenantOptions] = useState<
-    { value: string; label: string }[]
-  >([])
-
-  useEffect(() => {
-    getTenantOptions().then(setTenantOptions)
-  }, [])
+  const { data: tenantOptions = [] } = useTenantOptions()
+  const updateMutation = useUpdateLease(leaseId)
 
   const {
     register,
     handleSubmit,
     setValue,
     watch,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<EditLeaseFormValues>({
     resolver: zodResolver(editLeaseSchema),
     defaultValues: {
@@ -152,7 +136,7 @@ function LeaseEditForm({ lease, leaseId }: LeaseEditFormProps) {
 
   const onSubmit = async (values: EditLeaseFormValues) => {
     try {
-      await updateLease(leaseId, values)
+      await updateMutation.mutateAsync(values)
       toast.success("Lease updated successfully")
       router.push(LEASE_ROUTES.DETAIL(leaseId))
     } catch (err) {
@@ -316,7 +300,7 @@ function LeaseEditForm({ lease, leaseId }: LeaseEditFormProps) {
       </div>
 
       <div className="flex justify-end gap-3">
-        <Button type="submit" loading={isSubmitting}>
+        <Button type="submit" loading={updateMutation.isPending}>
           Save Changes
         </Button>
       </div>
