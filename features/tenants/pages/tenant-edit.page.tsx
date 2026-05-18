@@ -1,6 +1,5 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 
 import { toast } from "sonner"
@@ -8,11 +7,10 @@ import { toast } from "sonner"
 import { PageHeader } from "@/shared/components/page-header.component"
 import { Card, CardContent } from "@/shared/components/ui/card"
 import { TENANT_ROUTES } from "@/shared/constants/routes.constants"
-import type { TenantDetail } from "@/shared/types/tenant.types"
 
 import { TenantForm } from "../components/tenant-form.component"
+import { useTenant, useUpdateTenant } from "../hooks/use-tenants.hook"
 import type { EditTenantFormValues } from "../schemas/tenant.schema"
-import { getTenant, updateTenant } from "../services/tenants.service"
 
 type TenantEditPageProps = {
   tenantId: string
@@ -20,31 +18,18 @@ type TenantEditPageProps = {
 
 export default function TenantEditPage({ tenantId }: TenantEditPageProps) {
   const router = useRouter()
-  const [tenant, setTenant] = useState<TenantDetail | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-
-  useEffect(() => {
-    const load = async () => {
-      const data = await getTenant(tenantId)
-      setTenant(data)
-      setIsLoading(false)
-    }
-    load()
-  }, [tenantId])
+  const { data: tenant, isLoading } = useTenant(tenantId)
+  const updateMutation = useUpdateTenant(tenantId)
 
   const handleSubmit = async (values: EditTenantFormValues) => {
-    setIsSubmitting(true)
     try {
-      await updateTenant(tenantId, values)
+      await updateMutation.mutateAsync(values)
       toast.success("Tenant updated successfully")
       router.push(TENANT_ROUTES.DETAIL(tenantId))
     } catch (err) {
       toast.error(
         err instanceof Error ? err.message : "Failed to update tenant"
       )
-    } finally {
-      setIsSubmitting(false)
     }
   }
 
@@ -89,7 +74,7 @@ export default function TenantEditPage({ tenantId }: TenantEditPageProps) {
               emergencyContactPhone: tenant.emergencyContactPhone ?? "",
             }}
             onSubmit={handleSubmit}
-            isSubmitting={isSubmitting}
+            isSubmitting={updateMutation.isPending}
           />
         </CardContent>
       </Card>

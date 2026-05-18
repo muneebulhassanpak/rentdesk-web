@@ -1,6 +1,5 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 
 import { toast } from "sonner"
@@ -8,11 +7,10 @@ import { toast } from "sonner"
 import { PageHeader } from "@/shared/components/page-header.component"
 import { Card, CardContent } from "@/shared/components/ui/card"
 import { LEASE_ROUTES } from "@/shared/constants/routes.constants"
-import type { LeaseDetail } from "@/shared/types/lease.types"
 
 import { LeaseRenewalForm } from "../components/lease-renewal-form.component"
+import { useLease, useRenewLease } from "../hooks/use-leases.hook"
 import type { RenewLeaseFormValues } from "../schemas/lease.schema"
-import { getLease, renewLease } from "../services/leases.service"
 
 type LeaseRenewPageProps = {
   leaseId: string
@@ -20,21 +18,12 @@ type LeaseRenewPageProps = {
 
 export default function LeaseRenewPage({ leaseId }: LeaseRenewPageProps) {
   const router = useRouter()
-  const [lease, setLease] = useState<LeaseDetail | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(() => {
-    const load = async () => {
-      const data = await getLease(leaseId)
-      setLease(data)
-      setIsLoading(false)
-    }
-    load()
-  }, [leaseId])
+  const { data: lease, isLoading } = useLease(leaseId)
+  const renewMutation = useRenewLease(leaseId)
 
   const handleSubmit = async (values: RenewLeaseFormValues) => {
     try {
-      const newLease = await renewLease(leaseId, values)
+      const newLease = await renewMutation.mutateAsync(values)
       toast.success("Lease renewed successfully")
       router.push(LEASE_ROUTES.DETAIL(newLease.id))
     } catch (err) {

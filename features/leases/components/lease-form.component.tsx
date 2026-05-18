@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -20,36 +20,23 @@ import {
 import { Textarea } from "@/shared/components/ui/textarea"
 
 import {
+  usePropertyOptions,
+  useTenantOptions,
+  useUnitOptions,
+} from "../hooks/use-leases.hook"
+import {
   type CreateLeaseFormValues,
   createLeaseSchema,
 } from "../schemas/lease.schema"
-import {
-  getPropertyOptions,
-  getTenantOptions,
-  getUnitOptionsForProperty,
-} from "../services/leases.service"
-
-const MAX_DUE_DAY = 28
+import { DUE_DAY_OPTIONS } from "../utils/lease.utils"
 
 type LeaseFormProps = {
   onSubmit: (values: CreateLeaseFormValues) => Promise<void>
 }
 
 export const LeaseForm = ({ onSubmit }: LeaseFormProps) => {
-  const [propertyOptions, setPropertyOptions] = useState<
-    { value: string; label: string }[]
-  >([])
-  const [tenantOptions, setTenantOptions] = useState<
-    { value: string; label: string }[]
-  >([])
-  const [unitOptions, setUnitOptions] = useState<
-    { value: string; label: string }[]
-  >([])
-
-  useEffect(() => {
-    getPropertyOptions().then(setPropertyOptions)
-    getTenantOptions().then(setTenantOptions)
-  }, [])
+  const { data: propertyOptions = [] } = usePropertyOptions()
+  const { data: tenantOptions = [] } = useTenantOptions()
 
   const {
     register,
@@ -78,26 +65,15 @@ export const LeaseForm = ({ onSubmit }: LeaseFormProps) => {
   const selectedPrimaryTenantId = watch("primaryTenantId")
   const selectedPaymentDueDay = watch("paymentDueDay")
 
+  const { data: unitOptions = [] } = useUnitOptions(selectedPropertyId)
+
   useEffect(() => {
-    if (selectedPropertyId) {
-      getUnitOptionsForProperty(selectedPropertyId).then((options) => {
-        setUnitOptions(options)
-        setValue("unitId", "", { shouldValidate: false })
-      })
-    } else {
-      setUnitOptions([])
-      setValue("unitId", "", { shouldValidate: false })
-    }
+    setValue("unitId", "", { shouldValidate: false })
   }, [selectedPropertyId, setValue])
 
   const selectedTenantNames = tenantOptions.filter((t) =>
     selectedTenantIds.includes(t.value)
   )
-
-  const dueDayOptions = Array.from({ length: MAX_DUE_DAY }, (_, i) => ({
-    value: String(i + 1),
-    label: String(i + 1),
-  }))
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="grid gap-6">
@@ -256,7 +232,7 @@ export const LeaseForm = ({ onSubmit }: LeaseFormProps) => {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {dueDayOptions.map((option) => (
+              {DUE_DAY_OPTIONS.map((option) => (
                 <SelectItem key={option.value} value={option.value}>
                   {option.label}
                 </SelectItem>

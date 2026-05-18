@@ -1,6 +1,5 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import Link from "next/link"
 
 import { Bath, Bed, DollarSign, Maximize2, Pencil, Shield } from "lucide-react"
@@ -8,10 +7,9 @@ import { Bath, Bed, DollarSign, Maximize2, Pencil, Shield } from "lucide-react"
 import { PageHeader } from "@/shared/components/page-header.component"
 import { Button } from "@/shared/components/ui/button"
 import { Card, CardContent } from "@/shared/components/ui/card"
-import type { Property, Unit } from "@/shared/types/property.types"
 
 import { UnitStatusBadge } from "../components/unit-status-badge.component"
-import { getProperty, getUnit } from "../services/properties.service"
+import { useProperty, useUnit } from "../hooks/use-properties.hook"
 
 type UnitDetailPageProps = {
   propertyId: string
@@ -22,22 +20,8 @@ export default function UnitDetailPage({
   propertyId,
   unitId,
 }: UnitDetailPageProps) {
-  const [property, setProperty] = useState<Property | null>(null)
-  const [unit, setUnit] = useState<Unit | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(() => {
-    const load = async () => {
-      const [propData, unitData] = await Promise.all([
-        getProperty(propertyId),
-        getUnit(unitId),
-      ])
-      setProperty(propData)
-      setUnit(unitData)
-      setIsLoading(false)
-    }
-    load()
-  }, [propertyId, unitId])
+  const { data: property } = useProperty(propertyId)
+  const { data: unit, isLoading } = useUnit(unitId)
 
   if (isLoading) {
     return (

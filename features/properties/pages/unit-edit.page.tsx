@@ -1,19 +1,18 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useRouter } from "next/navigation"
 
 import { PageHeader } from "@/shared/components/page-header.component"
 import { Card, CardContent } from "@/shared/components/ui/card"
-import type { Property, Unit } from "@/shared/types/property.types"
 
 import { UnitForm } from "../components/unit-form.component"
-import type { UnitFormValues } from "../schemas/unit.schema"
 import {
-  getProperty,
-  getUnit,
-  updateUnit,
-} from "../services/properties.service"
+  useProperty,
+  useUnit,
+  useUpdateUnit,
+} from "../hooks/use-properties.hook"
+import type { UnitFormValues } from "../schemas/unit.schema"
 
 type UnitEditPageProps = {
   propertyId: string
@@ -25,28 +24,15 @@ export default function UnitEditPage({
   unitId,
 }: UnitEditPageProps) {
   const router = useRouter()
-  const [property, setProperty] = useState<Property | null>(null)
-  const [unit, setUnit] = useState<Unit | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const { data: property } = useProperty(propertyId)
+  const { data: unit, isLoading } = useUnit(unitId)
+  const updateMutation = useUpdateUnit(propertyId, unitId)
   const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    const load = async () => {
-      const [propData, unitData] = await Promise.all([
-        getProperty(propertyId),
-        getUnit(unitId),
-      ])
-      setProperty(propData)
-      setUnit(unitData)
-      setIsLoading(false)
-    }
-    load()
-  }, [propertyId, unitId])
 
   const handleSubmit = async (values: UnitFormValues) => {
     setError(null)
     try {
-      await updateUnit(unitId, values)
+      await updateMutation.mutateAsync(values)
       router.push(`/properties/${propertyId}/units/${unitId}`)
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to update unit")

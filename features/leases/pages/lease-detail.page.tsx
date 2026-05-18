@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useState } from "react"
 import Link from "next/link"
 
 import { CheckCircle, Pencil, RefreshCw, XCircle } from "lucide-react"
@@ -9,52 +9,32 @@ import { toast } from "sonner"
 import { PageHeader } from "@/shared/components/page-header.component"
 import { Button } from "@/shared/components/ui/button"
 import { LEASE_ROUTES } from "@/shared/constants/routes.constants"
-import type { LeaseDetail } from "@/shared/types/lease.types"
 
 import { LeaseDetailCard } from "../components/lease-detail-card.component"
 import { LeaseTenantsList } from "../components/lease-tenants-list.component"
 import { LeaseTerminationDialog } from "../components/lease-termination-dialog.component"
 import { LeaseTimeline } from "../components/lease-timeline.component"
-import { activateLease, getLease } from "../services/leases.service"
+import { useActivateLease, useLease } from "../hooks/use-leases.hook"
 
 type LeaseDetailPageProps = {
   leaseId: string
 }
 
 export default function LeaseDetailPage({ leaseId }: LeaseDetailPageProps) {
-  const [lease, setLease] = useState<LeaseDetail | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-  const [isActivating, setIsActivating] = useState(false)
+  const { data: lease, isLoading } = useLease(leaseId)
+  const activateMutation = useActivateLease(leaseId)
   const [isTerminateOpen, setIsTerminateOpen] = useState(false)
-  const [refreshKey, setRefreshKey] = useState(0)
-
-  useEffect(() => {
-    const load = async () => {
-      const data = await getLease(leaseId)
-      setLease(data)
-      setIsLoading(false)
-    }
-    load()
-  }, [leaseId, refreshKey])
 
   const handleActivate = useCallback(async () => {
-    setIsActivating(true)
     try {
-      await activateLease(leaseId)
+      await activateMutation.mutateAsync()
       toast.success("Lease activated successfully")
-      setRefreshKey((k) => k + 1)
     } catch (err) {
       toast.error(
         err instanceof Error ? err.message : "Failed to activate lease"
       )
-    } finally {
-      setIsActivating(false)
     }
-  }, [leaseId])
-
-  const handleTerminated = useCallback(() => {
-    setRefreshKey((k) => k + 1)
-  }, [])
+  }, [activateMutation])
 
   if (isLoading) {
     return (
@@ -98,7 +78,10 @@ export default function LeaseDetailPage({ leaseId }: LeaseDetailPageProps) {
                 Edit
               </Link>
             </Button>
-            <Button onClick={handleActivate} loading={isActivating}>
+            <Button
+              onClick={handleActivate}
+              loading={activateMutation.isPending}
+            >
               <CheckCircle className="h-4 w-4" />
               Activate
             </Button>
@@ -135,7 +118,6 @@ export default function LeaseDetailPage({ leaseId }: LeaseDetailPageProps) {
         open={isTerminateOpen}
         onOpenChange={setIsTerminateOpen}
         leaseId={leaseId}
-        onTerminated={handleTerminated}
       />
     </div>
   )

@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-const MAX_DUE_DAY = 28
+import { MAX_DUE_DAY } from "../utils/lease.utils"
 
 export const createLeaseSchema = z
   .object({

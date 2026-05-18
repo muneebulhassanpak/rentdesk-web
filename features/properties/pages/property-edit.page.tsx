@@ -1,15 +1,14 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useRouter } from "next/navigation"
 
 import { PageHeader } from "@/shared/components/page-header.component"
 import { Card, CardContent } from "@/shared/components/ui/card"
-import type { Property } from "@/shared/types/property.types"
 
 import { PropertyForm } from "../components/property-form.component"
+import { useProperty, useUpdateProperty } from "../hooks/use-properties.hook"
 import type { PropertyFormValues } from "../schemas/property.schema"
-import { getProperty, updateProperty } from "../services/properties.service"
 
 type PropertyEditPageProps = {
   propertyId: string
@@ -19,23 +18,14 @@ export default function PropertyEditPage({
   propertyId,
 }: PropertyEditPageProps) {
   const router = useRouter()
-  const [property, setProperty] = useState<Property | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const { data: property, isLoading } = useProperty(propertyId)
+  const updateMutation = useUpdateProperty(propertyId)
   const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    const load = async () => {
-      const data = await getProperty(propertyId)
-      setProperty(data)
-      setIsLoading(false)
-    }
-    load()
-  }, [propertyId])
 
   const handleSubmit = async (values: PropertyFormValues) => {
     setError(null)
     try {
-      await updateProperty(propertyId, values)
+      await updateMutation.mutateAsync(values)
       router.push(`/properties/${propertyId}`)
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to update property")

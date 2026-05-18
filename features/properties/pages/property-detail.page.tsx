@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useMemo } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 
@@ -19,16 +19,15 @@ import {
   TabsTrigger,
 } from "@/shared/components/ui/tabs"
 import { useAuth } from "@/shared/hooks/use-auth.hook"
-import type { Property, Unit } from "@/shared/types/property.types"
 import { PROPERTY_TYPE_LABELS } from "@/shared/types/property.types"
 
 import { PropertyStats } from "../components/property-stats.component"
 import { createUnitColumns } from "../components/unit-columns"
 import {
-  archiveProperty,
-  getProperty,
-  getUnits,
-} from "../services/properties.service"
+  useArchiveProperty,
+  useProperty,
+  useUnits,
+} from "../hooks/use-properties.hook"
 
 type PropertyDetailPageProps = {
   propertyId: string
@@ -39,31 +38,21 @@ export default function PropertyDetailPage({
 }: PropertyDetailPageProps) {
   const router = useRouter()
   const { user } = useAuth()
-  const [property, setProperty] = useState<Property | null>(null)
-  const [units, setUnits] = useState<Unit[]>([])
-  const [isLoading, setIsLoading] = useState(true)
 
-  useEffect(() => {
-    const load = async () => {
-      const [propData, unitData] = await Promise.all([
-        getProperty(propertyId),
-        getUnits(propertyId),
-      ])
-      setProperty(propData)
-      setUnits(unitData)
-      setIsLoading(false)
-    }
-    load()
-  }, [propertyId])
+  const { data: property, isLoading: isPropertyLoading } =
+    useProperty(propertyId)
+  const { data: units = [], isLoading: isUnitsLoading } = useUnits(propertyId)
+  const archiveMutation = useArchiveProperty()
 
   const handleArchive = useCallback(async () => {
-    await archiveProperty(propertyId)
+    await archiveMutation.mutateAsync(propertyId)
     router.push("/properties")
-  }, [propertyId, router])
+  }, [propertyId, router, archiveMutation])
 
   const unitColumns = useMemo(() => createUnitColumns(propertyId), [propertyId])
 
   const isLandlord = user?.role === "landlord"
+  const isLoading = isPropertyLoading || isUnitsLoading
 
   if (isLoading) {
     return (
