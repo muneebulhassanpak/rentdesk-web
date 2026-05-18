@@ -8,7 +8,7 @@ import { Card, CardContent } from "@/shared/components/ui/card"
 
 import { PropertyForm } from "../components/property-form.component"
 import type { PropertyFormValues } from "../schemas/property.schema"
-import { createProperty } from "../services/properties-mock.service"
+import { createProperty } from "../services/properties.service"
 
 export default function PropertyCreatePage() {
   const router = useRouter()

@@ -9,7 +9,7 @@ import type { Property } from "@/shared/types/property.types"
 
 import { UnitForm } from "../components/unit-form.component"
 import type { UnitFormValues } from "../schemas/unit.schema"
-import { createUnit, getProperty } from "../services/properties-mock.service"
+import { createUnit, getProperty } from "../services/properties.service"
 
 type UnitCreatePageProps = {
   propertyId: string

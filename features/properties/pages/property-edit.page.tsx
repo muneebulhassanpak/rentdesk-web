@@ -9,10 +9,7 @@ import type { Property } from "@/shared/types/property.types"
 
 import { PropertyForm } from "../components/property-form.component"
 import type { PropertyFormValues } from "../schemas/property.schema"
-import {
-  getProperty,
-  updateProperty,
-} from "../services/properties-mock.service"
+import { getProperty, updateProperty } from "../services/properties.service"
 
 type PropertyEditPageProps = {
   propertyId: string

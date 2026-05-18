@@ -28,7 +28,7 @@ import {
   archiveProperty,
   getProperty,
   getUnits,
-} from "../services/properties-mock.service"
+} from "../services/properties.service"
 
 type PropertyDetailPageProps = {
   propertyId: string

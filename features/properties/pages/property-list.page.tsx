@@ -28,7 +28,7 @@ import { PROPERTY_TYPE_LABELS } from "@/shared/types/property.types"
 
 import { PropertyCard } from "../components/property-card.component"
 import { propertyColumns } from "../components/property-columns"
-import { getProperties } from "../services/properties-mock.service"
+import { getProperties } from "../services/properties.service"
 
 type ViewMode = "table" | "grid"
 

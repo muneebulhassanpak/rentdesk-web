@@ -9,4 +9,4 @@ export {
   getUnits,
   updateProperty,
   updateUnit,
-} from "./services/properties-mock.service"
+} from "./services/properties.service"

@@ -11,7 +11,7 @@ import { Card, CardContent } from "@/shared/components/ui/card"
 import type { Property, Unit } from "@/shared/types/property.types"
 
 import { UnitStatusBadge } from "../components/unit-status-badge.component"
-import { getProperty, getUnit } from "../services/properties-mock.service"
+import { getProperty, getUnit } from "../services/properties.service"
 
 type UnitDetailPageProps = {
   propertyId: string
