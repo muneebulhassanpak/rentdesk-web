@@ -227,6 +227,17 @@ const eslintConfig = defineConfig([
     },
   },
 
+  // ─── Suppress React Compiler warnings for react-hook-form / TanStack Table ───
+  {
+    files: [
+      "features/**/components/**-form.component.tsx",
+      "shared/components/data-table.component.tsx",
+    ],
+    rules: {
+      "react-hooks/incompatible-library": "off",
+    },
+  },
+
   // ─── Ban Loader2: use Button's `loading` prop instead ───
   {
     ignores: ["shared/components/ui/button.tsx"],
