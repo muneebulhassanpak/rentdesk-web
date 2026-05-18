@@ -24,8 +24,7 @@ import { TENANT_STATUS_LABELS } from "@/shared/types/tenant.types"
 
 import { tenantColumns } from "../components/tenant-columns"
 import { useTenants } from "../hooks/use-tenants.hook"
-
-const ALL_STATUSES = "all"
+import { ALL_STATUSES } from "../utils/tenant.utils"
 
 export default function TenantListPage() {
   const router = useRouter()
