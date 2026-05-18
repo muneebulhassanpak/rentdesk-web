@@ -151,7 +151,8 @@ const EditForm = ({
     defaultValues: {
       fullName: "",
       phone: "",
-      emergencyContact: "",
+      emergencyContactName: "",
+      emergencyContactPhone: "",
       ...defaultValues,
     },
   })
@@ -188,14 +189,26 @@ const EditForm = ({
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="grid gap-2">
-          <Label htmlFor="emergencyContact">
-            Emergency Contact{" "}
+          <Label htmlFor="emergencyContactName">
+            Emergency Contact Name{" "}
             <span className="text-muted-foreground">(optional)</span>
           </Label>
           <Input
-            id="emergencyContact"
-            placeholder="Robert Smith – (555) 987-6543"
-            {...register("emergencyContact")}
+            id="emergencyContactName"
+            placeholder="Robert Smith"
+            {...register("emergencyContactName")}
+          />
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="emergencyContactPhone">
+            Emergency Contact Phone{" "}
+            <span className="text-muted-foreground">(optional)</span>
+          </Label>
+          <Input
+            id="emergencyContactPhone"
+            type="tel"
+            placeholder="(555) 987-6543"
+            {...register("emergencyContactPhone")}
           />
         </div>
       </div>

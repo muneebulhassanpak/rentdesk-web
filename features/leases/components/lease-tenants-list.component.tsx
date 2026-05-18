@@ -23,30 +23,32 @@ export const LeaseTenantsList = ({ tenants }: LeaseTenantsListProps) => {
       </CardHeader>
       <CardContent>
         <div className="grid gap-4">
-          {tenants.map((tenant) => (
-            <div key={tenant.tenantId} className="flex items-center gap-3">
-              <UserAvatar
-                fullName={tenant.fullName}
-                avatarUrl={tenant.avatarUrl}
-              />
-              <div className="grid gap-0.5">
-                <div className="flex items-center gap-2">
-                  <Link
-                    href={TENANT_ROUTES.DETAIL(tenant.tenantId)}
-                    className="text-sm font-medium text-primary hover:underline"
-                  >
-                    {tenant.fullName}
-                  </Link>
-                  {tenant.isPrimary && (
-                    <Badge variant="secondary">Primary</Badge>
+          {tenants.map((tenant) => {
+            const name = tenant.fullName ?? "Tenant"
+            return (
+              <div key={tenant.tenantId} className="flex items-center gap-3">
+                <UserAvatar fullName={name} avatarUrl={tenant.avatarUrl} />
+                <div className="grid gap-0.5">
+                  <div className="flex items-center gap-2">
+                    <Link
+                      href={TENANT_ROUTES.DETAIL(tenant.tenantId)}
+                      className="text-sm font-medium text-primary hover:underline"
+                    >
+                      {name}
+                    </Link>
+                    {tenant.isPrimary && (
+                      <Badge variant="secondary">Primary</Badge>
+                    )}
+                  </div>
+                  {tenant.email && (
+                    <span className="text-sm text-muted-foreground">
+                      {tenant.email}
+                    </span>
                   )}
                 </div>
-                <span className="text-sm text-muted-foreground">
-                  {tenant.email}
-                </span>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
       </CardContent>
     </Card>

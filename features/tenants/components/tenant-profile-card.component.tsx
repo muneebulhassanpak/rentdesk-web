@@ -9,11 +9,11 @@ import { Button } from "@/shared/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/shared/components/ui/card"
 import { UserAvatar } from "@/shared/components/user-avatar.component"
 import { TENANT_ROUTES } from "@/shared/constants/routes.constants"
-import type { Tenant, TenantStatus } from "@/shared/types/tenant.types"
+import type { TenantDetail, TenantStatus } from "@/shared/types/tenant.types"
 import { TENANT_STATUS_LABELS } from "@/shared/types/tenant.types"
 
 type TenantProfileCardProps = {
-  tenant: Tenant
+  tenant: TenantDetail
   deactivateButton: React.ReactNode
 }
 
@@ -66,19 +66,25 @@ export const TenantProfileCard = ({
             <span>{tenant.phone}</span>
           </div>
         )}
-        {tenant.emergencyContact && (
+        {(tenant.emergencyContactName || tenant.emergencyContactPhone) && (
           <div className="flex items-center gap-2 text-sm">
             <ShieldAlert className="h-4 w-4 text-muted-foreground" />
             <span className="text-muted-foreground">Emergency:</span>
-            <span>{tenant.emergencyContact}</span>
+            <span>
+              {[tenant.emergencyContactName, tenant.emergencyContactPhone]
+                .filter(Boolean)
+                .join(" — ")}
+            </span>
           </div>
         )}
-        {!tenant.phone && !tenant.emergencyContact && (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <UserX className="h-4 w-4" />
-            <span>No additional contact information</span>
-          </div>
-        )}
+        {!tenant.phone &&
+          !tenant.emergencyContactName &&
+          !tenant.emergencyContactPhone && (
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <UserX className="h-4 w-4" />
+              <span>No additional contact information</span>
+            </div>
+          )}
       </CardContent>
     </Card>
   )

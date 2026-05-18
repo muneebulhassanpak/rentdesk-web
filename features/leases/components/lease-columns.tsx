@@ -28,10 +28,12 @@ export const leaseColumns: ColumnDef<Lease>[] = [
         href={LEASE_ROUTES.DETAIL(row.original.id)}
         className="font-medium text-primary hover:underline"
       >
-        <div>{row.original.propertyName}</div>
-        <div className="text-xs text-muted-foreground">
-          {row.original.unitLabel}
-        </div>
+        <div>{row.original.propertyName ?? "\u2014"}</div>
+        {row.original.unitLabel && (
+          <div className="text-xs text-muted-foreground">
+            {row.original.unitLabel}
+          </div>
+        )}
       </Link>
     ),
   },
@@ -39,19 +41,22 @@ export const leaseColumns: ColumnDef<Lease>[] = [
     id: "tenants",
     header: "Tenant(s)",
     cell: ({ row }) => {
-      const primary = row.original.tenants.find((t) => t.isPrimary)
-      const coTenantCount = row.original.tenants.length - 1
+      const tenants = row.original.tenants
+      if (!tenants || tenants.length === 0) {
+        return <span className="text-muted-foreground">{"\u2014"}</span>
+      }
 
-      if (!primary) return <span className="text-muted-foreground">--</span>
+      const primary = tenants.find((t) => t.isPrimary)
+      const coTenantCount = tenants.length - 1
 
+      if (!primary)
+        return <span className="text-muted-foreground">{"\u2014"}</span>
+
+      const name = primary.fullName ?? "Tenant"
       return (
         <div className="flex items-center gap-2">
-          <UserAvatar
-            fullName={primary.fullName}
-            avatarUrl={primary.avatarUrl}
-            size="sm"
-          />
-          <span className="text-sm">{primary.fullName}</span>
+          <UserAvatar fullName={name} avatarUrl={primary.avatarUrl} size="sm" />
+          <span className="text-sm">{name}</span>
           {coTenantCount > 0 && (
             <span className="text-xs text-muted-foreground">
               +{coTenantCount}
