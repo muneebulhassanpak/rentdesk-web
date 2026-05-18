@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useState } from "react"
 import { useRouter } from "next/navigation"
 
 import { Plus, Users } from "lucide-react"
@@ -19,46 +19,29 @@ import {
 } from "@/shared/components/ui/select"
 import { TENANT_ROUTES } from "@/shared/constants/routes.constants"
 import { useAuth } from "@/shared/hooks/use-auth.hook"
-import type { PaginatedResponse } from "@/shared/types/property.types"
-import type { Tenant, TenantStatus } from "@/shared/types/tenant.types"
+import type { TenantStatus } from "@/shared/types/tenant.types"
 import { TENANT_STATUS_LABELS } from "@/shared/types/tenant.types"
 
 import { tenantColumns } from "../components/tenant-columns"
-import { getTenants } from "../services/tenants.service"
+import { useTenants } from "../hooks/use-tenants.hook"
 
 const ALL_STATUSES = "all"
 
 export default function TenantListPage() {
   const router = useRouter()
   const { user } = useAuth()
-  const [result, setResult] = useState<PaginatedResponse<Tenant> | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
   const [search, setSearch] = useState("")
   const [statusFilter, setStatusFilter] = useState<string>(ALL_STATUSES)
   const [page, setPage] = useState(0)
 
-  useEffect(() => {
-    if (!user) return
-    let cancelled = false
-
-    getTenants(user.orgId, {
-      search: search || undefined,
-      status:
-        statusFilter !== ALL_STATUSES
-          ? (statusFilter as TenantStatus)
-          : undefined,
-      page: page + 1,
-    }).then((data) => {
-      if (!cancelled) {
-        setResult(data)
-        setIsLoading(false)
-      }
-    })
-
-    return () => {
-      cancelled = true
-    }
-  }, [user, search, statusFilter, page])
+  const { data: result, isLoading } = useTenants(user?.orgId ?? "", {
+    search: search || undefined,
+    status:
+      statusFilter !== ALL_STATUSES
+        ? (statusFilter as TenantStatus)
+        : undefined,
+    page: page + 1,
+  })
 
   const handleSearchChange = useCallback((value: string) => {
     setSearch(value)

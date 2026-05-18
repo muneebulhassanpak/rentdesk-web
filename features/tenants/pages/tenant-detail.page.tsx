@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useState } from "react"
+import { useCallback } from "react"
 import { useRouter } from "next/navigation"
 
 import { UserX } from "lucide-react"
@@ -10,11 +10,10 @@ import { ConfirmDialog } from "@/shared/components/confirm-dialog.component"
 import { PageHeader } from "@/shared/components/page-header.component"
 import { Button } from "@/shared/components/ui/button"
 import { TENANT_ROUTES } from "@/shared/constants/routes.constants"
-import type { TenantDetail } from "@/shared/types/tenant.types"
 
 import { TenantLeaseHistory } from "../components/tenant-lease-history.component"
 import { TenantProfileCard } from "../components/tenant-profile-card.component"
-import { deactivateTenant, getTenant } from "../services/tenants.service"
+import { useDeactivateTenant, useTenant } from "../hooks/use-tenants.hook"
 
 type TenantDetailPageProps = {
   tenantId: string
@@ -22,25 +21,16 @@ type TenantDetailPageProps = {
 
 export default function TenantDetailPage({ tenantId }: TenantDetailPageProps) {
   const router = useRouter()
-  const [tenant, setTenant] = useState<TenantDetail | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(() => {
-    const load = async () => {
-      const data = await getTenant(tenantId)
-      setTenant(data)
-      setIsLoading(false)
-    }
-    load()
-  }, [tenantId])
+  const { data: tenant, isLoading } = useTenant(tenantId)
+  const deactivateMutation = useDeactivateTenant(tenantId)
 
   const handleDeactivate = useCallback(async () => {
-    const result = await deactivateTenant(tenantId)
+    const result = await deactivateMutation.mutateAsync()
     if (result) {
       toast.success(`${result.fullName} has been deactivated`)
       router.push(TENANT_ROUTES.LIST)
     }
-  }, [tenantId, router])
+  }, [deactivateMutation, router])
 
   if (isLoading) {
     return (
