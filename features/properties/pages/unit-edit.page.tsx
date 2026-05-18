@@ -13,7 +13,7 @@ import {
   getProperty,
   getUnit,
   updateUnit,
-} from "../services/properties-mock.service"
+} from "../services/properties.service"
 
 type UnitEditPageProps = {
   propertyId: string
