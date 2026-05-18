@@ -32,7 +32,7 @@ export const MagicLinkForm = ({ onSubmit, error }: MagicLinkFormProps) => {
   })
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
+    <form onSubmit={handleSubmit(onSubmit)} noValidate className="grid gap-4">
       <p className="text-sm text-muted-foreground">
         Enter your email and we&apos;ll send you a link to sign in — no password
         needed.

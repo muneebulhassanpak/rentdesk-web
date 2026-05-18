@@ -15,10 +15,9 @@ import { type LoginFormValues, loginSchema } from "../schemas/login.schema"
 
 type LoginFormProps = {
   onSubmit: (values: LoginFormValues) => Promise<void>
-  error?: string | null
 }
 
-export const LoginForm = ({ onSubmit, error }: LoginFormProps) => {
+export const LoginForm = ({ onSubmit }: LoginFormProps) => {
   const {
     register,
     handleSubmit,
@@ -29,7 +28,7 @@ export const LoginForm = ({ onSubmit, error }: LoginFormProps) => {
   })
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
+    <form onSubmit={handleSubmit(onSubmit)} noValidate className="grid gap-4">
       <div className="grid gap-2">
         <Label htmlFor="email">Email</Label>
         <Input
@@ -64,8 +63,6 @@ export const LoginForm = ({ onSubmit, error }: LoginFormProps) => {
           <p className="text-sm text-destructive">{errors.password.message}</p>
         )}
       </div>
-
-      {error && <p className="text-sm text-destructive">{error}</p>}
 
       <Button type="submit" loading={isSubmitting} className="w-full">
         Sign in
