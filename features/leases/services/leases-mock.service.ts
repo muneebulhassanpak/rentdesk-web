@@ -138,20 +138,21 @@ const lookupTenant = (id: string) => TENANT_OPTIONS.find((t) => t.id === id)
 const buildTenants = (
   tenantIds: string[],
   primaryTenantId: string
-): LeaseTenant[] =>
-  tenantIds
-    .map((id) => {
-      const t = lookupTenant(id)
-      if (!t) return null
-      return {
-        tenantId: t.id,
-        fullName: t.fullName,
-        email: t.email,
-        avatarUrl: t.avatarUrl,
-        isPrimary: t.id === primaryTenantId,
-      }
+): LeaseTenant[] => {
+  const result: LeaseTenant[] = []
+  for (const id of tenantIds) {
+    const t = lookupTenant(id)
+    if (!t) continue
+    result.push({
+      tenantId: t.id,
+      fullName: t.fullName,
+      email: t.email,
+      avatarUrl: t.avatarUrl,
+      isPrimary: t.id === primaryTenantId,
     })
-    .filter((t): t is LeaseTenant => t !== null)
+  }
+  return result
+}
 
 const computeStatus = (baseStatus: string, endDate: string): LeaseStatus => {
   if (baseStatus === "draft" || baseStatus === "terminated") {
