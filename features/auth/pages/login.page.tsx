@@ -14,7 +14,7 @@ export default function LoginPage() {
   const handleSubmit = async (values: LoginFormValues) => {
     try {
       const response = await authLogin(values)
-      login(response.user, response.accessToken, response.refreshToken)
+      login(response.user)
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Login failed")
     }
