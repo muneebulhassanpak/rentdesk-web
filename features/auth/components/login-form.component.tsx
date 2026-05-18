@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@/shared/components/ui/button"
 import { Input } from "@/shared/components/ui/input"
 import { Label } from "@/shared/components/ui/label"
+import { PasswordInput } from "@/shared/components/ui/password-input"
 import { AUTH_ROUTES } from "@/shared/constants/routes.constants"
 
 import { type LoginFormValues, loginSchema } from "../schemas/login.schema"
@@ -53,9 +54,8 @@ export const LoginForm = ({ onSubmit, error }: LoginFormProps) => {
             Forgot password?
           </Link>
         </div>
-        <Input
+        <PasswordInput
           id="password"
-          type="password"
           placeholder="Enter your password"
           autoComplete="current-password"
           {...register("password")}

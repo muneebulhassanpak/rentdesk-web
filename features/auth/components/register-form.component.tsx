@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@/shared/components/ui/button"
 import { Input } from "@/shared/components/ui/input"
 import { Label } from "@/shared/components/ui/label"
+import { PasswordInput } from "@/shared/components/ui/password-input"
 import { AUTH_ROUTES } from "@/shared/constants/routes.constants"
 
 import {
@@ -79,9 +80,8 @@ export const RegisterForm = ({ onSubmit, error }: RegisterFormProps) => {
 
       <div className="grid gap-2">
         <Label htmlFor="password">Password</Label>
-        <Input
+        <PasswordInput
           id="password"
-          type="password"
           placeholder="Min. 8 characters"
           autoComplete="new-password"
           {...register("password")}
@@ -93,9 +93,8 @@ export const RegisterForm = ({ onSubmit, error }: RegisterFormProps) => {
 
       <div className="grid gap-2">
         <Label htmlFor="confirmPassword">Confirm password</Label>
-        <Input
+        <PasswordInput
           id="confirmPassword"
-          type="password"
           placeholder="Repeat your password"
           autoComplete="new-password"
           {...register("confirmPassword")}
