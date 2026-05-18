@@ -38,7 +38,7 @@ export const RegisterForm = ({ onSubmit, error }: RegisterFormProps) => {
   })
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
+    <form onSubmit={handleSubmit(onSubmit)} noValidate className="grid gap-4">
       <div className="grid gap-2">
         <Label htmlFor="fullName">Full name</Label>
         <Input

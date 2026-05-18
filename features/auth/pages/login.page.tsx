@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { toast } from "sonner"
 
 import { useAuth } from "@/shared/hooks/use-auth.hook"
 
@@ -10,15 +10,13 @@ import { authLogin } from "../services/auth.service"
 
 export default function LoginPage() {
   const { login } = useAuth()
-  const [error, setError] = useState<string | null>(null)
 
   const handleSubmit = async (values: LoginFormValues) => {
-    setError(null)
     try {
       const response = await authLogin(values)
       login(response.user, response.accessToken, response.refreshToken)
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Login failed")
+      toast.error(err instanceof Error ? err.message : "Login failed")
     }
   }
 
@@ -30,7 +28,7 @@ export default function LoginPage() {
           Sign in to your RentDesk account
         </p>
       </div>
-      <LoginForm onSubmit={handleSubmit} error={error} />
+      <LoginForm onSubmit={handleSubmit} />
     </div>
   )
 }
