@@ -11,7 +11,7 @@ import { TENANT_ROUTES } from "@/shared/constants/routes.constants"
 
 import { TenantForm } from "../components/tenant-form.component"
 import type { InviteTenantFormValues } from "../schemas/tenant.schema"
-import { createTenant } from "../services/tenants-mock.service"
+import { createTenant } from "../services/tenants.service"
 
 export default function TenantInvitePage() {
   const router = useRouter()

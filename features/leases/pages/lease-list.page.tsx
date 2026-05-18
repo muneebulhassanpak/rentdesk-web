@@ -24,7 +24,7 @@ import { LEASE_STATUS_LABELS } from "@/shared/types/lease.types"
 import type { PaginatedResponse } from "@/shared/types/property.types"
 
 import { leaseColumns } from "../components/lease-columns"
-import { getLeases, getPropertyOptions } from "../services/leases-mock.service"
+import { getLeases, getPropertyOptions } from "../services/leases.service"
 
 const ALL_STATUSES = "all"
 const ALL_PROPERTIES = "all"
@@ -38,8 +38,13 @@ export default function LeaseListPage() {
   const [statusFilter, setStatusFilter] = useState<string>(ALL_STATUSES)
   const [propertyFilter, setPropertyFilter] = useState<string>(ALL_PROPERTIES)
   const [page, setPage] = useState(0)
+  const [propertyOptions, setPropertyOptions] = useState<
+    { value: string; label: string }[]
+  >([])
 
-  const propertyOptions = getPropertyOptions()
+  useEffect(() => {
+    getPropertyOptions().then(setPropertyOptions)
+  }, [])
 
   useEffect(() => {
     if (!user) return

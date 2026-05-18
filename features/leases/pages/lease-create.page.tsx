@@ -10,7 +10,7 @@ import { LEASE_ROUTES } from "@/shared/constants/routes.constants"
 
 import { LeaseForm } from "../components/lease-form.component"
 import type { CreateLeaseFormValues } from "../schemas/lease.schema"
-import { createLease } from "../services/leases-mock.service"
+import { createLease } from "../services/leases.service"
 
 export default function LeaseCreatePage() {
   const router = useRouter()

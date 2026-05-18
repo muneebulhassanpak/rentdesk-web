@@ -27,7 +27,7 @@ import {
   getPropertyOptions,
   getTenantOptions,
   getUnitOptionsForProperty,
-} from "../services/leases-mock.service"
+} from "../services/leases.service"
 
 const MAX_DUE_DAY = 28
 
@@ -36,11 +36,20 @@ type LeaseFormProps = {
 }
 
 export const LeaseForm = ({ onSubmit }: LeaseFormProps) => {
-  const propertyOptions = getPropertyOptions()
-  const tenantOptions = getTenantOptions()
+  const [propertyOptions, setPropertyOptions] = useState<
+    { value: string; label: string }[]
+  >([])
+  const [tenantOptions, setTenantOptions] = useState<
+    { value: string; label: string }[]
+  >([])
   const [unitOptions, setUnitOptions] = useState<
     { value: string; label: string }[]
   >([])
+
+  useEffect(() => {
+    getPropertyOptions().then(setPropertyOptions)
+    getTenantOptions().then(setTenantOptions)
+  }, [])
 
   const {
     register,
@@ -71,9 +80,10 @@ export const LeaseForm = ({ onSubmit }: LeaseFormProps) => {
 
   useEffect(() => {
     if (selectedPropertyId) {
-      const options = getUnitOptionsForProperty(selectedPropertyId)
-      setUnitOptions(options)
-      setValue("unitId", "", { shouldValidate: false })
+      getUnitOptionsForProperty(selectedPropertyId).then((options) => {
+        setUnitOptions(options)
+        setValue("unitId", "", { shouldValidate: false })
+      })
     } else {
       setUnitOptions([])
       setValue("unitId", "", { shouldValidate: false })

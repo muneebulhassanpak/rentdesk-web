@@ -22,7 +22,7 @@ import {
   type TerminateLeaseFormValues,
   terminateLeaseSchema,
 } from "../schemas/lease.schema"
-import { terminateLease } from "../services/leases-mock.service"
+import { terminateLease } from "../services/leases.service"
 
 type LeaseTerminationDialogProps = {
   open: boolean
@@ -47,7 +47,7 @@ export const LeaseTerminationDialog = ({
     defaultValues: {
       terminationDate: "",
       reason: "",
-      depositNotes: "",
+      depositSettlementNotes: "",
     },
   })
 
@@ -111,15 +111,15 @@ export const LeaseTerminationDialog = ({
           </div>
 
           <div className="grid gap-2">
-            <Label htmlFor="depositNotes">
-              Deposit Notes{" "}
+            <Label htmlFor="depositSettlementNotes">
+              Deposit Settlement Notes{" "}
               <span className="text-muted-foreground">(optional)</span>
             </Label>
             <Textarea
-              id="depositNotes"
+              id="depositSettlementNotes"
               placeholder="Notes about security deposit disposition..."
               rows={2}
-              {...register("depositNotes")}
+              {...register("depositSettlementNotes")}
             />
           </div>
 

@@ -20,7 +20,7 @@ export type Tenant = {
   fullName: string
   phone?: string
   avatarUrl?: string
-  emergencyContact?: string
+  isActive: boolean
   status: TenantStatus
   lastActiveAt?: string
   createdAt: string
@@ -32,16 +32,19 @@ export type Tenant = {
 }
 
 export type TenantDetail = Tenant & {
+  emergencyContactName?: string
+  emergencyContactPhone?: string
+  notes?: string
   leaseHistory: TenantLeaseEntry[]
 }
 
 export type TenantLeaseEntry = {
-  leaseId: string
-  unitLabel: string
-  propertyName: string
+  id: string
+  unitId: string
+  propertyId: string
   startDate: string
   endDate: string
-  monthlyRent: number
+  monthlyRent: string
   status: string
 }
 
@@ -52,7 +55,9 @@ export type InviteTenantRequest = {
 }
 
 export type UpdateTenantRequest = {
-  fullName: string
+  fullName?: string
   phone?: string
-  emergencyContact?: string
+  emergencyContactName?: string
+  emergencyContactPhone?: string
+  notes?: string
 }

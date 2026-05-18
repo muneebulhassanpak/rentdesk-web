@@ -18,8 +18,8 @@ export const LEASE_STATUS_LABELS: Record<LeaseStatus, string> = {
 
 export type LeaseTenant = {
   tenantId: string
-  fullName: string
-  email: string
+  fullName?: string
+  email?: string
   avatarUrl?: string
   isPrimary: boolean
 }
@@ -36,16 +36,23 @@ export type Lease = {
   securityDeposit: number
   paymentDueDay: number
   notes?: string
+  terminatedAt?: string
+  terminationReason?: string
+  depositSettlementNotes?: string
   renewedFromLeaseId?: string
+  createdBy?: string
   createdAt: string
   updatedAt: string
-  // Joined fields for list view
-  unitLabel: string
-  propertyName: string
-  tenants: LeaseTenant[]
+  // Only present in detail response
+  unitLabel?: string
+  propertyName?: string
+  tenants?: LeaseTenant[]
 }
 
 export type LeaseDetail = Lease & {
+  unitLabel: string
+  propertyName: string
+  tenants: LeaseTenant[]
   primaryTenant: LeaseTenant
 }
 
@@ -77,6 +84,6 @@ export type RenewLeaseRequest = {
 
 export type TerminateLeaseRequest = {
   terminationDate: string
-  reason: string
-  depositNotes?: string
+  reason?: string
+  depositSettlementNotes?: string
 }

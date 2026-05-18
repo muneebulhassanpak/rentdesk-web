@@ -97,17 +97,20 @@ export const LeaseRenewalForm = ({
           Tenants (carried over from current lease)
         </span>
         <div className="grid gap-2">
-          {currentLease.tenants.map((tenant) => (
-            <div key={tenant.tenantId} className="flex items-center gap-2">
-              <UserAvatar
-                fullName={tenant.fullName}
-                avatarUrl={tenant.avatarUrl}
-                size="sm"
-              />
-              <span className="text-sm">{tenant.fullName}</span>
-              {tenant.isPrimary && <Badge variant="secondary">Primary</Badge>}
-            </div>
-          ))}
+          {currentLease.tenants.map((tenant) => {
+            const name = tenant.fullName ?? "Tenant"
+            return (
+              <div key={tenant.tenantId} className="flex items-center gap-2">
+                <UserAvatar
+                  fullName={name}
+                  avatarUrl={tenant.avatarUrl}
+                  size="sm"
+                />
+                <span className="text-sm">{name}</span>
+                {tenant.isPrimary && <Badge variant="secondary">Primary</Badge>}
+              </div>
+            )
+          })}
         </div>
       </div>
 

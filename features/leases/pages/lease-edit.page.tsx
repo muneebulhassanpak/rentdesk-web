@@ -32,7 +32,7 @@ import {
   getLease,
   getTenantOptions,
   updateLease,
-} from "../services/leases-mock.service"
+} from "../services/leases.service"
 
 const MAX_DUE_DAY = 28
 
@@ -109,7 +109,13 @@ type LeaseEditFormProps = {
 
 function LeaseEditForm({ lease, leaseId }: LeaseEditFormProps) {
   const router = useRouter()
-  const tenantOptions = getTenantOptions()
+  const [tenantOptions, setTenantOptions] = useState<
+    { value: string; label: string }[]
+  >([])
+
+  useEffect(() => {
+    getTenantOptions().then(setTenantOptions)
+  }, [])
 
   const {
     register,

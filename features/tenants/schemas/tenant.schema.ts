@@ -11,7 +11,8 @@ export type InviteTenantFormValues = z.infer<typeof inviteTenantSchema>
 export const editTenantSchema = z.object({
   fullName: z.string().min(1, "Full name is required"),
   phone: z.string().optional(),
-  emergencyContact: z.string().optional(),
+  emergencyContactName: z.string().optional(),
+  emergencyContactPhone: z.string().optional(),
 })
 
 export type EditTenantFormValues = z.infer<typeof editTenantSchema>

@@ -56,15 +56,15 @@ export const TenantLeaseHistory = ({ entries }: TenantLeaseHistoryProps) => {
           <div className="space-y-4">
             {entries.map((entry) => (
               <div
-                key={entry.leaseId}
+                key={entry.id}
                 className="flex flex-col gap-2 rounded-lg border p-4 sm:flex-row sm:items-center sm:justify-between"
               >
                 <div className="grid gap-1">
                   <Link
-                    href={LEASE_ROUTES.DETAIL(entry.leaseId)}
+                    href={LEASE_ROUTES.DETAIL(entry.id)}
                     className="font-medium text-primary hover:underline"
                   >
-                    {entry.propertyName} &middot; Unit {entry.unitLabel}
+                    Lease
                   </Link>
                   <DateRangeDisplay
                     startDate={entry.startDate}
@@ -74,7 +74,7 @@ export const TenantLeaseHistory = ({ entries }: TenantLeaseHistoryProps) => {
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="text-sm font-medium">
-                    ${entry.monthlyRent.toLocaleString()}/mo
+                    ${Number(entry.monthlyRent).toLocaleString()}/mo
                   </span>
                   <StatusBadge
                     label={LEASE_STATUS_LABELS[entry.status] ?? entry.status}
