@@ -10,7 +10,7 @@ import { AUTH_ROUTES } from "@/shared/constants/routes.constants"
 
 import { ForgotPasswordForm } from "../components/forgot-password-form.component"
 import type { ForgotPasswordFormValues } from "../schemas/forgot-password.schema"
-import { mockForgotPassword } from "../services/auth-mock.service"
+import { authForgotPassword } from "../services/auth.service"
 
 export default function ForgotPasswordPage() {
   const [isSuccess, setIsSuccess] = useState(false)
@@ -19,7 +19,7 @@ export default function ForgotPasswordPage() {
   const handleSubmit = async (values: ForgotPasswordFormValues) => {
     setError(null)
     try {
-      await mockForgotPassword(values)
+      await authForgotPassword(values)
       setIsSuccess(true)
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong")

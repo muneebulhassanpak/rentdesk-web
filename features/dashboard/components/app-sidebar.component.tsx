@@ -36,7 +36,9 @@ export const AppSidebar = () => {
             <Building2 className="h-4 w-4 text-primary-foreground" />
           </div>
           <div className="grid leading-tight">
-            <span className="text-sm font-semibold">{user.orgName}</span>
+            <span className="text-sm font-semibold">
+              {user.orgName ?? "RentDesk"}
+            </span>
             <span className="text-xs text-muted-foreground capitalize">
               {user.role}
             </span>

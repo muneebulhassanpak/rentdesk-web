@@ -21,7 +21,7 @@ const MOCK_USERS: Record<string, User> = {
     orgId: MOCK_ORG_ID,
     orgName: MOCK_ORG_NAME,
     isEmailVerified: true,
-    isTotpEnabled: false,
+    totpEnabled: false,
   },
   "manager@oaktree.demo": {
     id: "usr_manager_001",
@@ -31,7 +31,7 @@ const MOCK_USERS: Record<string, User> = {
     orgId: MOCK_ORG_ID,
     orgName: MOCK_ORG_NAME,
     isEmailVerified: true,
-    isTotpEnabled: false,
+    totpEnabled: false,
   },
   "tenant1@oaktree.demo": {
     id: "usr_tenant_001",
@@ -41,7 +41,7 @@ const MOCK_USERS: Record<string, User> = {
     orgId: MOCK_ORG_ID,
     orgName: MOCK_ORG_NAME,
     isEmailVerified: true,
-    isTotpEnabled: false,
+    totpEnabled: false,
   },
   "vendor@reliable.demo": {
     id: "usr_vendor_001",
@@ -51,7 +51,7 @@ const MOCK_USERS: Record<string, User> = {
     orgId: MOCK_ORG_ID,
     orgName: MOCK_ORG_NAME,
     isEmailVerified: true,
-    isTotpEnabled: false,
+    totpEnabled: false,
   },
 }
 
@@ -88,7 +88,7 @@ export const mockRegister = async (
     orgId: `org_${crypto.randomUUID().slice(0, UUID_SLICE_LENGTH)}`,
     orgName: data.orgName,
     isEmailVerified: false,
-    isTotpEnabled: false,
+    totpEnabled: false,
   }
 
   return {

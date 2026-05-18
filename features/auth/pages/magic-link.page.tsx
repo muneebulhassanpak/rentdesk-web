@@ -10,7 +10,7 @@ import { AUTH_ROUTES } from "@/shared/constants/routes.constants"
 
 import { MagicLinkForm } from "../components/magic-link-form.component"
 import type { MagicLinkFormValues } from "../schemas/magic-link.schema"
-import { mockMagicLink } from "../services/auth-mock.service"
+import { authMagicLink } from "../services/auth.service"
 
 export default function MagicLinkPage() {
   const [isSuccess, setIsSuccess] = useState(false)
@@ -19,7 +19,7 @@ export default function MagicLinkPage() {
   const handleSubmit = async (values: MagicLinkFormValues) => {
     setError(null)
     try {
-      await mockMagicLink(values)
+      await authMagicLink(values)
       setIsSuccess(true)
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong")

@@ -11,7 +11,7 @@ import { AUTH_ROUTES } from "@/shared/constants/routes.constants"
 
 import { ResetPasswordForm } from "../components/reset-password-form.component"
 import type { ResetPasswordFormValues } from "../schemas/reset-password.schema"
-import { mockResetPassword } from "../services/auth-mock.service"
+import { authResetPassword } from "../services/auth.service"
 
 const ResetPasswordContent = () => {
   const searchParams = useSearchParams()
@@ -22,7 +22,7 @@ const ResetPasswordContent = () => {
   const handleSubmit = async (values: ResetPasswordFormValues) => {
     setError(null)
     try {
-      await mockResetPassword({ newPassword: values.newPassword, token })
+      await authResetPassword({ newPassword: values.newPassword, token })
       setIsSuccess(true)
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong")

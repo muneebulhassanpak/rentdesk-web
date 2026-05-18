@@ -6,7 +6,7 @@ import { useAuth } from "@/shared/hooks/use-auth.hook"
 
 import { LoginForm } from "../components/login-form.component"
 import type { LoginFormValues } from "../schemas/login.schema"
-import { mockLogin } from "../services/auth-mock.service"
+import { authLogin } from "../services/auth.service"
 
 export default function LoginPage() {
   const { login } = useAuth()
@@ -15,8 +15,8 @@ export default function LoginPage() {
   const handleSubmit = async (values: LoginFormValues) => {
     setError(null)
     try {
-      const response = await mockLogin(values)
-      login(response.user)
+      const response = await authLogin(values)
+      login(response.user, response.accessToken, response.refreshToken)
     } catch (err) {
       setError(err instanceof Error ? err.message : "Login failed")
     }
