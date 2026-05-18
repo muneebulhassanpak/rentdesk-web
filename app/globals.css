@@ -1,0 +1,388 @@
+/* ============================================================================
+   RentDesk — Global Styles & Design System Tokens
+   Source of truth: overview/RentDesk Design System/colors_and_type.css
+   ========================================================================== */
+
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ─── Tailwind theme: map CSS vars → utility classes ─── */
+@theme inline {
+  /* Fonts */
+  --font-sans: var(--font-sans);
+  --font-serif: var(--font-serif);
+  --font-mono: var(--font-mono);
+  --font-heading: var(--font-sans);
+
+  /* shadcn semantic colors */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Chart colors */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* Sidebar */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* RentDesk brand: jade scale */
+  --color-jade-50: #ecf5f1;
+  --color-jade-100: #d2e8df;
+  --color-jade-200: #a5d1bf;
+  --color-jade-300: #6eb39b;
+  --color-jade-400: #3e9077;
+  --color-jade-500: #1f7359;
+  --color-jade-600: #0b5d4f;
+  --color-jade-700: #084538;
+  --color-jade-800: #053128;
+  --color-jade-900: #03201a;
+
+  /* RentDesk brand: clay/terracotta scale */
+  --color-clay-50: #fbf1ec;
+  --color-clay-100: #f4dcd0;
+  --color-clay-200: #e9b59e;
+  --color-clay-300: #dd8e6c;
+  --color-clay-400: #d97757;
+  --color-clay-500: #c25e3f;
+  --color-clay-600: #9e4628;
+  --color-clay-700: #75321b;
+
+  /* RentDesk brand: warm neutrals (paper/ink) */
+  --color-paper: #fafaf7;
+  --color-paper-2: #f4f3ee;
+  --color-paper-3: #eceae2;
+  --color-ink-50: #e4e2da;
+  --color-ink-100: #d5d2c8;
+  --color-ink-200: #b8b4a6;
+  --color-ink-300: #8e8a7c;
+  --color-ink-400: #6c695e;
+  --color-ink-500: #4e4c44;
+  --color-ink-600: #36352f;
+  --color-ink-700: #25241f;
+  --color-ink-800: #1a1a16;
+  --color-ink-900: #111110;
+
+  /* RentDesk status colors */
+  --color-success: var(--rd-success);
+  --color-success-bg: var(--rd-success-bg);
+  --color-warning: var(--rd-warning);
+  --color-warning-bg: var(--rd-warning-bg);
+  --color-danger: var(--rd-danger);
+  --color-danger-bg: var(--rd-danger-bg);
+  --color-info: var(--rd-info);
+  --color-info-bg: var(--rd-info-bg);
+
+  /* Radius — 8px is the house rule */
+  --radius-xs: 3px;
+  --radius-sm: 5px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 18px;
+  --radius-pill: 999px;
+
+  /* Shadows — calibrated for warm paper bg */
+  --shadow-xs:
+    0 0 0 1px rgba(17, 17, 16, 0.04), 0 1px 1px rgba(17, 17, 16, 0.03);
+  --shadow-sm:
+    0 0 0 1px rgba(17, 17, 16, 0.05), 0 1px 2px rgba(17, 17, 16, 0.04),
+    0 2px 4px rgba(17, 17, 16, 0.03);
+  --shadow-md:
+    0 0 0 1px rgba(17, 17, 16, 0.06), 0 2px 4px rgba(17, 17, 16, 0.04),
+    0 6px 12px rgba(17, 17, 16, 0.05);
+  --shadow-lg:
+    0 0 0 1px rgba(17, 17, 16, 0.06), 0 4px 8px rgba(17, 17, 16, 0.05),
+    0 16px 32px rgba(17, 17, 16, 0.07);
+  --shadow-pop:
+    0 0 0 1px rgba(17, 17, 16, 0.08), 0 8px 24px rgba(17, 17, 16, 0.1),
+    0 24px 64px rgba(17, 17, 16, 0.12);
+}
+
+/* ─── Light mode (default) ─── */
+:root {
+  /* RentDesk color primitives */
+  --rd-jade-50: #ecf5f1;
+  --rd-jade-100: #d2e8df;
+  --rd-jade-200: #a5d1bf;
+  --rd-jade-300: #6eb39b;
+  --rd-jade-400: #3e9077;
+  --rd-jade-500: #1f7359;
+  --rd-jade-600: #0b5d4f;
+  --rd-jade-700: #084538;
+  --rd-jade-800: #053128;
+  --rd-jade-900: #03201a;
+
+  --rd-clay-50: #fbf1ec;
+  --rd-clay-100: #f4dcd0;
+  --rd-clay-200: #e9b59e;
+  --rd-clay-300: #dd8e6c;
+  --rd-clay-400: #d97757;
+  --rd-clay-500: #c25e3f;
+  --rd-clay-600: #9e4628;
+  --rd-clay-700: #75321b;
+
+  --rd-paper: #fafaf7;
+  --rd-paper-2: #f4f3ee;
+  --rd-paper-3: #eceae2;
+  --rd-ink-50: #e4e2da;
+  --rd-ink-100: #d5d2c8;
+  --rd-ink-200: #b8b4a6;
+  --rd-ink-300: #8e8a7c;
+  --rd-ink-400: #6c695e;
+  --rd-ink-500: #4e4c44;
+  --rd-ink-600: #36352f;
+  --rd-ink-700: #25241f;
+  --rd-ink-800: #1a1a16;
+  --rd-ink-900: #111110;
+
+  /* RentDesk semantic status */
+  --rd-success: #1f7359;
+  --rd-success-bg: #e0efe7;
+  --rd-warning: #b07a12;
+  --rd-warning-bg: #f6e9cc;
+  --rd-danger: #b23a2a;
+  --rd-danger-bg: #f6dad3;
+  --rd-info: #2a5c8a;
+  --rd-info-bg: #dce7f1;
+
+  /* RentDesk semantic surfaces */
+  --rd-bg: var(--rd-paper);
+  --rd-bg-raised: #ffffff;
+  --rd-bg-sunk: var(--rd-paper-2);
+  --rd-bg-stripe: var(--rd-paper-3);
+  --rd-fg: var(--rd-ink-900);
+  --rd-fg-muted: var(--rd-ink-500);
+  --rd-fg-subtle: var(--rd-ink-400);
+  --rd-fg-faint: var(--rd-ink-300);
+  --rd-fg-on-jade: #ffffff;
+  --rd-fg-on-clay: #ffffff;
+  --rd-border: var(--rd-ink-50);
+  --rd-border-strong: var(--rd-ink-100);
+  --rd-border-input: var(--rd-ink-100);
+  --rd-border-focus: var(--rd-jade-500);
+  --rd-action: var(--rd-jade-500);
+  --rd-action-hover: var(--rd-jade-600);
+  --rd-action-pressed: var(--rd-jade-700);
+  --rd-action-soft-bg: var(--rd-jade-50);
+  --rd-accent: var(--rd-clay-400);
+
+  /* RentDesk shadows */
+  --rd-shadow-xs:
+    0 0 0 1px rgba(17, 17, 16, 0.04), 0 1px 1px rgba(17, 17, 16, 0.03);
+  --rd-shadow-sm:
+    0 0 0 1px rgba(17, 17, 16, 0.05), 0 1px 2px rgba(17, 17, 16, 0.04),
+    0 2px 4px rgba(17, 17, 16, 0.03);
+  --rd-shadow-md:
+    0 0 0 1px rgba(17, 17, 16, 0.06), 0 2px 4px rgba(17, 17, 16, 0.04),
+    0 6px 12px rgba(17, 17, 16, 0.05);
+  --rd-shadow-lg:
+    0 0 0 1px rgba(17, 17, 16, 0.06), 0 4px 8px rgba(17, 17, 16, 0.05),
+    0 16px 32px rgba(17, 17, 16, 0.07);
+  --rd-shadow-pop:
+    0 0 0 1px rgba(17, 17, 16, 0.08), 0 8px 24px rgba(17, 17, 16, 0.1),
+    0 24px 64px rgba(17, 17, 16, 0.12);
+  --rd-shadow-inset: inset 0 1px 2px rgba(17, 17, 16, 0.06);
+  --rd-ring-focus: 0 0 0 3px rgba(31, 115, 89, 0.22);
+
+  /* RentDesk motion */
+  --rd-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --rd-ease-in: cubic-bezier(0.55, 0, 1, 0.45);
+  --rd-ease-spring: cubic-bezier(0.34, 1.3, 0.64, 1);
+  --rd-dur-1: 80ms;
+  --rd-dur-2: 140ms;
+  --rd-dur-3: 220ms;
+  --rd-dur-4: 380ms;
+
+  /* RentDesk type scale */
+  --rd-text-xs: 12px;
+  --rd-text-sm: 13px;
+  --rd-text-base: 15px;
+  --rd-text-md: 17px;
+  --rd-text-lg: 20px;
+  --rd-text-xl: 24px;
+  --rd-text-2xl: 30px;
+  --rd-text-3xl: 38px;
+  --rd-text-4xl: 48px;
+  --rd-text-5xl: 64px;
+  --rd-text-6xl: 84px;
+
+  /* RentDesk spacing (4px base) */
+  --rd-sp-0: 0;
+  --rd-sp-1: 4px;
+  --rd-sp-2: 8px;
+  --rd-sp-3: 12px;
+  --rd-sp-4: 16px;
+  --rd-sp-5: 20px;
+  --rd-sp-6: 24px;
+  --rd-sp-7: 32px;
+  --rd-sp-8: 40px;
+  --rd-sp-9: 56px;
+  --rd-sp-10: 72px;
+  --rd-sp-11: 96px;
+  --rd-sp-12: 128px;
+
+  /* ── shadcn semantic vars (mapped to RentDesk) ── */
+  --background: #fafaf7;
+  --foreground: #111110;
+  --card: #ffffff;
+  --card-foreground: #111110;
+  --popover: #ffffff;
+  --popover-foreground: #111110;
+  --primary: #1f7359;
+  --primary-foreground: #ffffff;
+  --secondary: #f4f3ee;
+  --secondary-foreground: #25241f;
+  --muted: #f4f3ee;
+  --muted-foreground: #4e4c44;
+  --accent: #ecf5f1;
+  --accent-foreground: #084538;
+  --destructive: #c25e3f;
+  --border: #e4e2da;
+  --input: #d5d2c8;
+  --ring: #1f7359;
+  --radius: 0.5rem;
+
+  /* Chart — jade/clay tones */
+  --chart-1: #1f7359;
+  --chart-2: #d97757;
+  --chart-3: #2a5c8a;
+  --chart-4: #b07a12;
+  --chart-5: #6eb39b;
+
+  /* Sidebar — warm sunk surface */
+  --sidebar: #f4f3ee;
+  --sidebar-foreground: #111110;
+  --sidebar-primary: #1f7359;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #ffffff;
+  --sidebar-accent-foreground: #111110;
+  --sidebar-border: #e4e2da;
+  --sidebar-ring: #1f7359;
+}
+
+/* ─── Dark mode ─── */
+.dark {
+  /* Override RentDesk semantic surfaces for dark */
+  --rd-bg: #111110;
+  --rd-bg-raised: #1a1a16;
+  --rd-bg-sunk: #0d0d0b;
+  --rd-bg-stripe: #1a1a16;
+  --rd-fg: #eceae2;
+  --rd-fg-muted: #8e8a7c;
+  --rd-fg-subtle: #6c695e;
+  --rd-fg-faint: #4e4c44;
+  --rd-border: #2a2925;
+  --rd-border-strong: #36352f;
+  --rd-border-input: #36352f;
+  --rd-action: #3e9077;
+  --rd-action-hover: #6eb39b;
+  --rd-action-pressed: #1f7359;
+  --rd-action-soft-bg: rgba(31, 115, 89, 0.15);
+  --rd-accent: #d97757;
+
+  /* Dark semantic status */
+  --rd-success: #3e9077;
+  --rd-success-bg: rgba(31, 115, 89, 0.15);
+  --rd-warning: #d4a24a;
+  --rd-warning-bg: rgba(176, 122, 18, 0.15);
+  --rd-danger: #d97757;
+  --rd-danger-bg: rgba(178, 58, 42, 0.15);
+  --rd-info: #5b9acd;
+  --rd-info-bg: rgba(42, 92, 138, 0.15);
+
+  /* Dark shadows */
+  --rd-shadow-xs: 0 0 0 1px rgba(0, 0, 0, 0.25), 0 1px 1px rgba(0, 0, 0, 0.2);
+  --rd-shadow-sm:
+    0 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.25),
+    0 2px 4px rgba(0, 0, 0, 0.2);
+  --rd-shadow-md:
+    0 0 0 1px rgba(0, 0, 0, 0.35), 0 2px 4px rgba(0, 0, 0, 0.25),
+    0 6px 12px rgba(0, 0, 0, 0.2);
+  --rd-shadow-lg:
+    0 0 0 1px rgba(0, 0, 0, 0.35), 0 4px 8px rgba(0, 0, 0, 0.25),
+    0 16px 32px rgba(0, 0, 0, 0.2);
+  --rd-shadow-pop:
+    0 0 0 1px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.3),
+    0 24px 64px rgba(0, 0, 0, 0.25);
+  --rd-ring-focus: 0 0 0 3px rgba(62, 144, 119, 0.3);
+
+  /* ── shadcn semantic vars (dark) ── */
+  --background: #111110;
+  --foreground: #eceae2;
+  --card: #1a1a16;
+  --card-foreground: #eceae2;
+  --popover: #1a1a16;
+  --popover-foreground: #eceae2;
+  --primary: #3e9077;
+  --primary-foreground: #ffffff;
+  --secondary: #25241f;
+  --secondary-foreground: #d5d2c8;
+  --muted: #25241f;
+  --muted-foreground: #8e8a7c;
+  --accent: #25241f;
+  --accent-foreground: #eceae2;
+  --destructive: #d97757;
+  --border: #2a2925;
+  --input: #36352f;
+  --ring: #3e9077;
+
+  /* Chart — brighter for dark bg */
+  --chart-1: #3e9077;
+  --chart-2: #d97757;
+  --chart-3: #5b9acd;
+  --chart-4: #d4a24a;
+  --chart-5: #a5d1bf;
+
+  /* Sidebar — darkest layer */
+  --sidebar: #0d0d0b;
+  --sidebar-foreground: #eceae2;
+  --sidebar-primary: #3e9077;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #1a1a16;
+  --sidebar-accent-foreground: #eceae2;
+  --sidebar-border: #25241f;
+  --sidebar-ring: #3e9077;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "ss01", "cv11";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  html {
+    @apply font-sans;
+  }
+}
