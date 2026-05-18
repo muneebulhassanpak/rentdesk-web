@@ -231,6 +231,8 @@ const eslintConfig = defineConfig([
   {
     files: [
       "features/**/components/**-form.component.tsx",
+      "features/**/components/**-dialog.component.tsx",
+      "features/**/pages/**-edit.page.tsx",
       "shared/components/data-table.component.tsx",
     ],
     rules: {

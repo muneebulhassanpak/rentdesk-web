@@ -26,8 +26,8 @@ export type NavItem = {
 const LANDLORD_NAV: NavItem[] = [
   { label: "Dashboard", href: "/landlord", icon: Home },
   { label: "Properties", href: "/properties", icon: Building2 },
-  { label: "Tenants", href: "/landlord/tenants", icon: Users },
-  { label: "Leases", href: "/landlord/leases", icon: ClipboardList },
+  { label: "Tenants", href: "/tenants", icon: Users },
+  { label: "Leases", href: "/leases", icon: ClipboardList },
   { label: "Payments", href: "/landlord/payments", icon: CreditCard },
   { label: "Maintenance", href: "/landlord/maintenance", icon: Wrench },
   { label: "Vendors", href: "/landlord/vendors", icon: HardHat },
@@ -41,8 +41,8 @@ const LANDLORD_NAV: NavItem[] = [
 const MANAGER_NAV: NavItem[] = [
   { label: "Dashboard", href: "/manager", icon: Home },
   { label: "Properties", href: "/properties", icon: Building2 },
-  { label: "Tenants", href: "/manager/tenants", icon: Users },
-  { label: "Leases", href: "/manager/leases", icon: ClipboardList },
+  { label: "Tenants", href: "/tenants", icon: Users },
+  { label: "Leases", href: "/leases", icon: ClipboardList },
   { label: "Payments", href: "/manager/payments", icon: CreditCard },
   { label: "Maintenance", href: "/manager/maintenance", icon: Wrench },
   { label: "Vendors", href: "/manager/vendors", icon: HardHat },
