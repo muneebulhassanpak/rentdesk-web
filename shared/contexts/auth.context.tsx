@@ -94,8 +94,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setIsReady(true)
   }, [])
 
-  // Validate session on mount via httpOnly cookie
+  // Validate session on mount via httpOnly cookie (only if we have a cached user)
   useEffect(() => {
+    if (!getStoredUser()) return
+
     let cancelled = false
     authGetMe()
       .then((freshUser) => {
