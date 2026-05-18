@@ -6,7 +6,7 @@ import { useAuth } from "@/shared/hooks/use-auth.hook"
 
 import { RegisterForm } from "../components/register-form.component"
 import type { RegisterFormValues } from "../schemas/register.schema"
-import { mockRegister } from "../services/auth-mock.service"
+import { authRegister } from "../services/auth.service"
 
 export default function RegisterPage() {
   const { login } = useAuth()
@@ -15,8 +15,8 @@ export default function RegisterPage() {
   const handleSubmit = async (values: RegisterFormValues) => {
     setError(null)
     try {
-      const response = await mockRegister(values)
-      login(response.user)
+      const response = await authRegister(values)
+      login(response.user, response.accessToken, response.refreshToken)
     } catch (err) {
       setError(err instanceof Error ? err.message : "Registration failed")
     }
