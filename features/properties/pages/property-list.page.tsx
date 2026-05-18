@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useState } from "react"
 import { useRouter } from "next/navigation"
 
 import { type SortingState } from "@tanstack/react-table"
@@ -19,16 +19,12 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select"
 import { useAuth } from "@/shared/hooks/use-auth.hook"
-import type {
-  PaginatedResponse,
-  Property,
-  PropertyType,
-} from "@/shared/types/property.types"
+import type { PropertyType } from "@/shared/types/property.types"
 import { PROPERTY_TYPE_LABELS } from "@/shared/types/property.types"
 
 import { PropertyCard } from "../components/property-card.component"
 import { propertyColumns } from "../components/property-columns"
-import { getProperties } from "../services/properties.service"
+import { useProperties } from "../hooks/use-properties.hook"
 
 type ViewMode = "table" | "grid"
 
@@ -37,36 +33,19 @@ const ALL_TYPES = "all"
 export default function PropertyListPage() {
   const router = useRouter()
   const { user } = useAuth()
-  const [result, setResult] = useState<PaginatedResponse<Property> | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
   const [viewMode, setViewMode] = useState<ViewMode>("table")
   const [search, setSearch] = useState("")
   const [typeFilter, setTypeFilter] = useState<string>(ALL_TYPES)
   const [sorting, setSorting] = useState<SortingState>([])
   const [page, setPage] = useState(0)
 
-  useEffect(() => {
-    if (!user) return
-    let cancelled = false
+  const { data: result, isLoading } = useProperties(user?.orgId ?? "", {
+    role: user?.role,
+    search: search || undefined,
+    type: typeFilter !== ALL_TYPES ? (typeFilter as PropertyType) : undefined,
+    page: page + 1,
+  })
 
-    getProperties(user.orgId, {
-      role: user.role,
-      search: search || undefined,
-      type: typeFilter !== ALL_TYPES ? (typeFilter as PropertyType) : undefined,
-      page: page + 1,
-    }).then((data) => {
-      if (!cancelled) {
-        setResult(data)
-        setIsLoading(false)
-      }
-    })
-
-    return () => {
-      cancelled = true
-    }
-  }, [user, search, typeFilter, page])
-
-  // Reset to page 0 when search or filter changes
   const handleSearchChange = useCallback((value: string) => {
     setSearch(value)
     setPage(0)
