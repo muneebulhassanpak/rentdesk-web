@@ -25,10 +25,9 @@ import { PROPERTY_TYPE_LABELS } from "@/shared/types/property.types"
 import { PropertyCard } from "../components/property-card.component"
 import { propertyColumns } from "../components/property-columns"
 import { useProperties } from "../hooks/use-properties.hook"
+import { ALL_TYPES } from "../utils/property.utils"
 
 type ViewMode = "table" | "grid"
-
-const ALL_TYPES = "all"
 
 export default function PropertyListPage() {
   const router = useRouter()
