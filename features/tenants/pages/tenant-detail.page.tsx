@@ -14,7 +14,7 @@ import type { TenantDetail } from "@/shared/types/tenant.types"
 
 import { TenantLeaseHistory } from "../components/tenant-lease-history.component"
 import { TenantProfileCard } from "../components/tenant-profile-card.component"
-import { deactivateTenant, getTenant } from "../services/tenants-mock.service"
+import { deactivateTenant, getTenant } from "../services/tenants.service"
 
 type TenantDetailPageProps = {
   tenantId: string

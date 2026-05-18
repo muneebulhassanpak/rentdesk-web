@@ -24,7 +24,7 @@ import type { Tenant, TenantStatus } from "@/shared/types/tenant.types"
 import { TENANT_STATUS_LABELS } from "@/shared/types/tenant.types"
 
 import { tenantColumns } from "../components/tenant-columns"
-import { getTenants } from "../services/tenants-mock.service"
+import { getTenants } from "../services/tenants.service"
 
 const ALL_STATUSES = "all"
 

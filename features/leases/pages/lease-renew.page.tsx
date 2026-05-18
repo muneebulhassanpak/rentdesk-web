@@ -12,7 +12,7 @@ import type { LeaseDetail } from "@/shared/types/lease.types"
 
 import { LeaseRenewalForm } from "../components/lease-renewal-form.component"
 import type { RenewLeaseFormValues } from "../schemas/lease.schema"
-import { getLease, renewLease } from "../services/leases-mock.service"
+import { getLease, renewLease } from "../services/leases.service"
 
 type LeaseRenewPageProps = {
   leaseId: string

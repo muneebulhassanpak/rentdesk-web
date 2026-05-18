@@ -15,7 +15,7 @@ import { LeaseDetailCard } from "../components/lease-detail-card.component"
 import { LeaseTenantsList } from "../components/lease-tenants-list.component"
 import { LeaseTerminationDialog } from "../components/lease-termination-dialog.component"
 import { LeaseTimeline } from "../components/lease-timeline.component"
-import { activateLease, getLease } from "../services/leases-mock.service"
+import { activateLease, getLease } from "../services/leases.service"
 
 type LeaseDetailPageProps = {
   leaseId: string

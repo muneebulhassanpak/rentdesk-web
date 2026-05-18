@@ -8,11 +8,11 @@ import { toast } from "sonner"
 import { PageHeader } from "@/shared/components/page-header.component"
 import { Card, CardContent } from "@/shared/components/ui/card"
 import { TENANT_ROUTES } from "@/shared/constants/routes.constants"
-import type { Tenant } from "@/shared/types/tenant.types"
+import type { TenantDetail } from "@/shared/types/tenant.types"
 
 import { TenantForm } from "../components/tenant-form.component"
 import type { EditTenantFormValues } from "../schemas/tenant.schema"
-import { getTenant, updateTenant } from "../services/tenants-mock.service"
+import { getTenant, updateTenant } from "../services/tenants.service"
 
 type TenantEditPageProps = {
   tenantId: string
@@ -20,7 +20,7 @@ type TenantEditPageProps = {
 
 export default function TenantEditPage({ tenantId }: TenantEditPageProps) {
   const router = useRouter()
-  const [tenant, setTenant] = useState<Tenant | null>(null)
+  const [tenant, setTenant] = useState<TenantDetail | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -85,7 +85,8 @@ export default function TenantEditPage({ tenantId }: TenantEditPageProps) {
             defaultValues={{
               fullName: tenant.fullName,
               phone: tenant.phone ?? "",
-              emergencyContact: tenant.emergencyContact ?? "",
+              emergencyContactName: tenant.emergencyContactName ?? "",
+              emergencyContactPhone: tenant.emergencyContactPhone ?? "",
             }}
             onSubmit={handleSubmit}
             isSubmitting={isSubmitting}
