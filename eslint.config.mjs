@@ -30,6 +30,7 @@ const eslintConfig = defineConfig([
           "features/**/pages/**/*.{ts,tsx}": "KEBAB_CASE",
           "shared/**/*.{ts,tsx}": "KEBAB_CASE",
         },
+        { ignoreMiddleExtensions: true },
       ],
       "check-file/folder-naming-convention": [
         "error",
@@ -213,6 +214,40 @@ const eslintConfig = defineConfig([
           ignoreArrayIndexes: true,
           ignoreDefaultValues: true,
           enforceConst: true,
+        },
+      ],
+    },
+  },
+
+  // ─── Disable magic numbers for shadcn primitives ───
+  {
+    files: ["shared/components/ui/**/*.{ts,tsx}", "shared/hooks/use-mobile.ts"],
+    rules: {
+      "no-magic-numbers": "off",
+    },
+  },
+
+  // ─── Ban Loader2: use Button's `loading` prop instead ───
+  {
+    ignores: ["shared/components/ui/button.tsx"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["../../*"],
+              message: "Use @/ path alias instead of deep relative imports.",
+            },
+          ],
+          paths: [
+            {
+              name: "lucide-react",
+              importNames: ["Loader2"],
+              message:
+                "Use Button's `loading` prop instead of manual Loader2 spinners.",
+            },
+          ],
         },
       ],
     },
