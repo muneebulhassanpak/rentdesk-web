@@ -6,6 +6,7 @@ import {
   getCoreRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  type PaginationState,
   type SortingState,
   useReactTable,
 } from "@tanstack/react-table"
@@ -26,13 +27,19 @@ import {
   TableRow,
 } from "@/shared/components/ui/table"
 
-const PAGE_SIZE = 10
+const DEFAULT_PAGE_SIZE = 10
 
 type DataTableProps<TData, TValue> = {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
   sorting?: SortingState
   onSortingChange?: (sorting: SortingState) => void
+  /** Total number of pages (enables server-side pagination) */
+  pageCount?: number
+  /** Current page index (0-based, for server-side pagination) */
+  page?: number
+  /** Callback when page changes (0-based index) */
+  onPageChange?: (page: number) => void
 }
 
 export function DataTable<TData, TValue>({
@@ -40,15 +47,36 @@ export function DataTable<TData, TValue>({
   data,
   sorting: externalSorting,
   onSortingChange,
+  pageCount: externalPageCount,
+  page: externalPage,
+  onPageChange,
 }: DataTableProps<TData, TValue>) {
+  const isServerSide = externalPageCount !== undefined
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
+    ...(!isServerSide && {
+      getPaginationRowModel: getPaginationRowModel(),
+      getSortedRowModel: getSortedRowModel(),
+    }),
+    ...(isServerSide && {
+      manualPagination: true,
+      pageCount: externalPageCount,
+      onPaginationChange: (updater) => {
+        if (onPageChange) {
+          const current: PaginationState = {
+            pageIndex: externalPage ?? 0,
+            pageSize: DEFAULT_PAGE_SIZE,
+          }
+          const next =
+            typeof updater === "function" ? updater(current) : updater
+          onPageChange(next.pageIndex)
+        }
+      },
+    }),
     ...(externalSorting !== undefined && {
-      state: { sorting: externalSorting },
       onSortingChange: (updater) => {
         if (onSortingChange) {
           const next =
@@ -57,8 +85,17 @@ export function DataTable<TData, TValue>({
         }
       },
     }),
+    state: {
+      ...(externalSorting !== undefined && { sorting: externalSorting }),
+      ...(isServerSide && {
+        pagination: {
+          pageIndex: externalPage ?? 0,
+          pageSize: DEFAULT_PAGE_SIZE,
+        },
+      }),
+    },
     initialState: {
-      pagination: { pageSize: PAGE_SIZE },
+      pagination: { pageSize: DEFAULT_PAGE_SIZE },
     },
   })
 
@@ -110,48 +147,46 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
 
-      {table.getPageCount() > 1 && (
-        <div className="flex items-center justify-between text-sm text-muted-foreground">
-          <span>
-            Page {table.getState().pagination.pageIndex + 1} of{" "}
-            {table.getPageCount()}
-          </span>
-          <div className="flex items-center gap-1">
-            <Button
-              variant="outline"
-              size="icon-sm"
-              onClick={() => table.setPageIndex(0)}
-              disabled={!table.getCanPreviousPage()}
-            >
-              <ChevronsLeft className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="outline"
-              size="icon-sm"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="outline"
-              size="icon-sm"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            >
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="outline"
-              size="icon-sm"
-              onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-              disabled={!table.getCanNextPage()}
-            >
-              <ChevronsRight className="h-4 w-4" />
-            </Button>
-          </div>
+      <div className="flex items-center justify-between text-sm text-muted-foreground">
+        <span>
+          Page {table.getState().pagination.pageIndex + 1} of{" "}
+          {table.getPageCount()}
+        </span>
+        <div className="flex items-center gap-1">
+          <Button
+            variant="outline"
+            size="icon-sm"
+            onClick={() => table.setPageIndex(0)}
+            disabled={!table.getCanPreviousPage()}
+          >
+            <ChevronsLeft className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="outline"
+            size="icon-sm"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="outline"
+            size="icon-sm"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="outline"
+            size="icon-sm"
+            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+            disabled={!table.getCanNextPage()}
+          >
+            <ChevronsRight className="h-4 w-4" />
+          </Button>
         </div>
-      )}
+      </div>
     </div>
   )
 }

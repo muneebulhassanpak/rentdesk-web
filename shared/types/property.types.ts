@@ -102,3 +102,11 @@ export type CreateUnitRequest = {
 }
 
 export type UpdateUnitRequest = Partial<Omit<CreateUnitRequest, "propertyId">>
+
+export type PaginatedResponse<T> = {
+  data: T[]
+  total: number
+  page: number
+  pageSize: number
+  pageCount: number
+}

@@ -3,6 +3,7 @@ export {
   createProperty,
   createUnit,
   getProperties,
+  type GetPropertiesParams,
   getProperty,
   getUnit,
   getUnits,

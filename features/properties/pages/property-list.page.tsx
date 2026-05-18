@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 
 import { type SortingState } from "@tanstack/react-table"
@@ -19,7 +19,11 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select"
 import { useAuth } from "@/shared/hooks/use-auth.hook"
-import type { Property, PropertyType } from "@/shared/types/property.types"
+import type {
+  PaginatedResponse,
+  Property,
+  PropertyType,
+} from "@/shared/types/property.types"
 import { PROPERTY_TYPE_LABELS } from "@/shared/types/property.types"
 
 import { PropertyCard } from "../components/property-card.component"
@@ -33,50 +37,55 @@ const ALL_TYPES = "all"
 export default function PropertyListPage() {
   const router = useRouter()
   const { user } = useAuth()
-  const [properties, setProperties] = useState<Property[]>([])
+  const [result, setResult] = useState<PaginatedResponse<Property> | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [viewMode, setViewMode] = useState<ViewMode>("table")
   const [search, setSearch] = useState("")
   const [typeFilter, setTypeFilter] = useState<string>(ALL_TYPES)
   const [sorting, setSorting] = useState<SortingState>([])
+  const [page, setPage] = useState(0)
 
   useEffect(() => {
-    const load = async () => {
-      if (!user) return
-      const data = await getProperties(user.orgId, user.role)
-      setProperties(data)
-      setIsLoading(false)
+    if (!user) return
+    let cancelled = false
+
+    getProperties(user.orgId, {
+      role: user.role,
+      search: search || undefined,
+      type: typeFilter !== ALL_TYPES ? (typeFilter as PropertyType) : undefined,
+      page: page + 1,
+    }).then((data) => {
+      if (!cancelled) {
+        setResult(data)
+        setIsLoading(false)
+      }
+    })
+
+    return () => {
+      cancelled = true
     }
-    load()
-  }, [user])
+  }, [user, search, typeFilter, page])
 
-  const filtered = useMemo(() => {
-    let result = properties
+  // Reset to page 0 when search or filter changes
+  const handleSearchChange = useCallback((value: string) => {
+    setSearch(value)
+    setPage(0)
+  }, [])
 
-    if (search) {
-      const q = search.toLowerCase()
-      result = result.filter(
-        (p) =>
-          p.name.toLowerCase().includes(q) ||
-          p.address.line1.toLowerCase().includes(q) ||
-          p.address.city.toLowerCase().includes(q)
-      )
-    }
-
-    if (typeFilter !== ALL_TYPES) {
-      result = result.filter((p) => p.type === typeFilter)
-    }
-
-    return result
-  }, [properties, search, typeFilter])
+  const handleTypeFilterChange = useCallback((value: string) => {
+    setTypeFilter(value)
+    setPage(0)
+  }, [])
 
   const handleAddProperty = useCallback(() => {
     router.push("/properties/new")
   }, [router])
 
   const isLandlord = user?.role === "landlord"
+  const properties = result?.data ?? []
+  const totalProperties = result?.total ?? 0
 
-  if (isLoading) {
+  if (isLoading && !result) {
     return (
       <div className="space-y-4 p-6">
         <div className="h-8 w-48 animate-pulse rounded bg-muted" />
@@ -89,7 +98,7 @@ export default function PropertyListPage() {
     <div className="space-y-6 p-6">
       <PageHeader
         title="Properties"
-        description={`${properties.length} ${properties.length === 1 ? "property" : "properties"} in your portfolio`}
+        description={`${totalProperties} ${totalProperties === 1 ? "property" : "properties"} in your portfolio`}
       >
         {isLandlord && (
           <Button onClick={handleAddProperty}>
@@ -99,7 +108,7 @@ export default function PropertyListPage() {
         )}
       </PageHeader>
 
-      {properties.length === 0 ? (
+      {totalProperties === 0 && !search && typeFilter === ALL_TYPES ? (
         <EmptyState
           icon={Building2}
           title="No properties yet"
@@ -113,11 +122,11 @@ export default function PropertyListPage() {
             <div className="flex flex-1 items-center gap-3">
               <SearchInput
                 value={search}
-                onChange={setSearch}
+                onChange={handleSearchChange}
                 placeholder="Search properties..."
                 className="w-full max-w-xs"
               />
-              <Select value={typeFilter} onValueChange={setTypeFilter}>
+              <Select value={typeFilter} onValueChange={handleTypeFilterChange}>
                 <SelectTrigger className="w-40">
                   <SelectValue placeholder="All types" />
                 </SelectTrigger>
@@ -159,13 +168,16 @@ export default function PropertyListPage() {
           {viewMode === "table" ? (
             <DataTable
               columns={propertyColumns}
-              data={filtered}
+              data={properties}
               sorting={sorting}
               onSortingChange={setSorting}
+              pageCount={result?.pageCount ?? 1}
+              page={page}
+              onPageChange={setPage}
             />
           ) : (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {filtered.map((property) => (
+              {properties.map((property) => (
                 <PropertyCard key={property.id} property={property} />
               ))}
             </div>

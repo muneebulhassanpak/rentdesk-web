@@ -1,7 +1,9 @@
 import type {
   CreatePropertyRequest,
   CreateUnitRequest,
+  PaginatedResponse,
   Property,
+  PropertyType,
   Unit,
   UpdatePropertyRequest,
   UpdateUnitRequest,
@@ -11,6 +13,7 @@ const MOCK_ORG_ID = "org_oaktree_001"
 const MOCK_DELAY_MS = 300
 const UUID_SLICE_LENGTH = 8
 const PERCENT = 100
+const DEFAULT_PAGE_SIZE = 10
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
@@ -481,11 +484,21 @@ let mockProperties: (typeof SEED_PROPERTIES)[number][] = [...SEED_PROPERTIES]
 
 // ─── Service functions ────────────────────────────────────────────────────────
 
+export type GetPropertiesParams = {
+  role?: string
+  search?: string
+  type?: PropertyType
+  page?: number
+  pageSize?: number
+}
+
 export const getProperties = async (
   _orgId: string,
-  role?: string
-): Promise<Property[]> => {
+  params: GetPropertiesParams = {}
+): Promise<PaginatedResponse<Property>> => {
   await delay(MOCK_DELAY_MS)
+  const { role, search, type, page = 1, pageSize = DEFAULT_PAGE_SIZE } = params
+
   let filtered = mockProperties.filter((p) => !p.isArchived)
 
   if (role === "manager") {
@@ -494,7 +507,32 @@ export const getProperties = async (
     )
   }
 
-  return filtered.map(buildProperty)
+  if (search) {
+    const q = search.toLowerCase()
+    filtered = filtered.filter(
+      (p) =>
+        p.name.toLowerCase().includes(q) ||
+        p.address.line1.toLowerCase().includes(q) ||
+        p.address.city.toLowerCase().includes(q)
+    )
+  }
+
+  if (type) {
+    filtered = filtered.filter((p) => p.type === type)
+  }
+
+  const total = filtered.length
+  const pageCount = Math.max(1, Math.ceil(total / pageSize))
+  const start = (page - 1) * pageSize
+  const paged = filtered.slice(start, start + pageSize)
+
+  return {
+    data: paged.map(buildProperty),
+    total,
+    page,
+    pageSize,
+    pageCount,
+  }
 }
 
 export const getProperty = async (
