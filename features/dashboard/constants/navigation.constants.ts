@@ -21,6 +21,7 @@ export type NavItem = {
   label: string
   href: string
   icon: LucideIcon
+  disabled?: boolean
 }
 
 const LANDLORD_NAV: NavItem[] = [
@@ -28,14 +29,49 @@ const LANDLORD_NAV: NavItem[] = [
   { label: "Properties", href: "/properties", icon: Building2 },
   { label: "Tenants", href: "/tenants", icon: Users },
   { label: "Leases", href: "/leases", icon: ClipboardList },
-  { label: "Payments", href: "/landlord/payments", icon: CreditCard },
-  { label: "Maintenance", href: "/landlord/maintenance", icon: Wrench },
-  { label: "Vendors", href: "/landlord/vendors", icon: HardHat },
-  { label: "Documents", href: "/landlord/documents", icon: FileText },
-  { label: "Reports", href: "/landlord/reports", icon: BarChart3 },
-  { label: "Team", href: "/landlord/team", icon: Users },
-  { label: "Audit Log", href: "/landlord/audit-log", icon: ScrollText },
-  { label: "Settings", href: "/landlord/settings", icon: Settings },
+  {
+    label: "Payments",
+    href: "/landlord/payments",
+    icon: CreditCard,
+    disabled: true,
+  },
+  {
+    label: "Maintenance",
+    href: "/landlord/maintenance",
+    icon: Wrench,
+    disabled: true,
+  },
+  {
+    label: "Vendors",
+    href: "/landlord/vendors",
+    icon: HardHat,
+    disabled: true,
+  },
+  {
+    label: "Documents",
+    href: "/landlord/documents",
+    icon: FileText,
+    disabled: true,
+  },
+  {
+    label: "Reports",
+    href: "/landlord/reports",
+    icon: BarChart3,
+    disabled: true,
+  },
+  { label: "Team", href: "/landlord/team", icon: Users, disabled: true },
+  {
+    label: "Audit Log",
+    href: "/landlord/audit-log",
+    icon: ScrollText,
+    disabled: true,
+  },
+  {
+    label: "Settings",
+    href: "/landlord/settings",
+    icon: Settings,
+    disabled: true,
+  },
 ]
 
 const MANAGER_NAV: NavItem[] = [
@@ -43,26 +79,76 @@ const MANAGER_NAV: NavItem[] = [
   { label: "Properties", href: "/properties", icon: Building2 },
   { label: "Tenants", href: "/tenants", icon: Users },
   { label: "Leases", href: "/leases", icon: ClipboardList },
-  { label: "Payments", href: "/manager/payments", icon: CreditCard },
-  { label: "Maintenance", href: "/manager/maintenance", icon: Wrench },
-  { label: "Vendors", href: "/manager/vendors", icon: HardHat },
-  { label: "Documents", href: "/manager/documents", icon: FileText },
-  { label: "Reports", href: "/manager/reports", icon: BarChart3 },
-  { label: "Settings", href: "/manager/settings", icon: Settings },
+  {
+    label: "Payments",
+    href: "/manager/payments",
+    icon: CreditCard,
+    disabled: true,
+  },
+  {
+    label: "Maintenance",
+    href: "/manager/maintenance",
+    icon: Wrench,
+    disabled: true,
+  },
+  { label: "Vendors", href: "/manager/vendors", icon: HardHat, disabled: true },
+  {
+    label: "Documents",
+    href: "/manager/documents",
+    icon: FileText,
+    disabled: true,
+  },
+  {
+    label: "Reports",
+    href: "/manager/reports",
+    icon: BarChart3,
+    disabled: true,
+  },
+  {
+    label: "Settings",
+    href: "/manager/settings",
+    icon: Settings,
+    disabled: true,
+  },
 ]
 
 const TENANT_NAV: NavItem[] = [
   { label: "Dashboard", href: "/tenant", icon: Home },
-  { label: "My Lease", href: "/tenant/lease", icon: ClipboardList },
-  { label: "Payments", href: "/tenant/payments", icon: CreditCard },
-  { label: "Maintenance", href: "/tenant/maintenance", icon: Wrench },
-  { label: "Documents", href: "/tenant/documents", icon: FileText },
+  {
+    label: "My Lease",
+    href: "/tenant/lease",
+    icon: ClipboardList,
+    disabled: true,
+  },
+  {
+    label: "Payments",
+    href: "/tenant/payments",
+    icon: CreditCard,
+    disabled: true,
+  },
+  {
+    label: "Maintenance",
+    href: "/tenant/maintenance",
+    icon: Wrench,
+    disabled: true,
+  },
+  {
+    label: "Documents",
+    href: "/tenant/documents",
+    icon: FileText,
+    disabled: true,
+  },
 ]
 
 const VENDOR_NAV: NavItem[] = [
   { label: "Dashboard", href: "/vendor", icon: Home },
-  { label: "My Tickets", href: "/vendor/tickets", icon: Ticket },
-  { label: "Profile", href: "/vendor/profile", icon: User },
+  {
+    label: "My Tickets",
+    href: "/vendor/tickets",
+    icon: Ticket,
+    disabled: true,
+  },
+  { label: "Profile", href: "/vendor/profile", icon: User, disabled: true },
 ]
 
 export const NAVIGATION_MAP: Record<Role, NavItem[]> = {

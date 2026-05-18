@@ -58,12 +58,25 @@ export const AppSidebar = () => {
 
                 return (
                   <SidebarMenuItem key={item.href}>
-                    <SidebarMenuButton asChild isActive={isActive}>
-                      <Link href={item.href}>
+                    {item.disabled ? (
+                      <SidebarMenuButton
+                        disabled
+                        className="pointer-events-none opacity-50"
+                      >
                         <item.icon className="h-4 w-4" />
                         <span>{item.label}</span>
-                      </Link>
-                    </SidebarMenuButton>
+                        <span className="ml-auto text-[10px] font-medium text-muted-foreground">
+                          Soon
+                        </span>
+                      </SidebarMenuButton>
+                    ) : (
+                      <SidebarMenuButton asChild isActive={isActive}>
+                        <Link href={item.href}>
+                          <item.icon className="h-4 w-4" />
+                          <span>{item.label}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    )}
                   </SidebarMenuItem>
                 )
               })}
