@@ -74,8 +74,8 @@ export type RenewLeaseFormValues = z.infer<typeof renewLeaseSchema>
 
 export const terminateLeaseSchema = z.object({
   terminationDate: z.string().min(1, "Termination date is required"),
-  reason: z.string().min(1, "Reason is required"),
-  depositNotes: z.string().optional(),
+  reason: z.string().optional(),
+  depositSettlementNotes: z.string().optional(),
 })
 
 export type TerminateLeaseFormValues = z.infer<typeof terminateLeaseSchema>
