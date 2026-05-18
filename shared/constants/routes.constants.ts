@@ -15,6 +15,21 @@ export const DASHBOARD_ROUTES = {
   VENDOR: "/vendor",
 } as const
 
+export const TENANT_ROUTES = {
+  LIST: "/tenants",
+  NEW: "/tenants/new",
+  DETAIL: (id: string) => `/tenants/${id}`,
+  EDIT: (id: string) => `/tenants/${id}/edit`,
+} as const
+
+export const LEASE_ROUTES = {
+  LIST: "/leases",
+  NEW: "/leases/new",
+  DETAIL: (id: string) => `/leases/${id}`,
+  EDIT: (id: string) => `/leases/${id}/edit`,
+  RENEW: (id: string) => `/leases/${id}/renew`,
+} as const
+
 export const ROLE_DASHBOARD_MAP: Record<Role, string> = {
   landlord: DASHBOARD_ROUTES.LANDLORD,
   manager: DASHBOARD_ROUTES.MANAGER,
