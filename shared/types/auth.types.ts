@@ -13,10 +13,10 @@ export type User = {
   fullName: string
   role: Role
   orgId: string
-  orgName: string
+  orgName?: string
   avatarUrl?: string
   isEmailVerified: boolean
-  isTotpEnabled: boolean
+  totpEnabled: boolean
 }
 
 export type LoginRequest = {
