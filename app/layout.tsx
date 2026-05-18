@@ -1,9 +1,19 @@
+import type { Metadata } from "next"
 import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google"
 
-import { ThemeProvider } from "@/components/theme-provider"
-import { cn } from "@/lib/utils"
+import { Providers } from "@/shared/components/providers.component"
+import { Toaster } from "@/shared/components/ui/sonner"
+import { cn } from "@/shared/lib/utils"
 
 import "./globals.css"
+
+export const metadata: Metadata = {
+  title: {
+    default: "RentDesk",
+    template: "%s | RentDesk",
+  },
+  description: "Property management for small landlords",
+}
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })
 
@@ -37,7 +47,10 @@ export default function RootLayout({
       )}
     >
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <Providers>
+          {children}
+          <Toaster />
+        </Providers>
       </body>
     </html>
   )
