@@ -32,8 +32,7 @@ import {
   type EditLeaseFormValues,
   editLeaseSchema,
 } from "../schemas/lease.schema"
-
-const MAX_DUE_DAY = 28
+import { DUE_DAY_OPTIONS } from "../utils/lease.utils"
 
 type LeaseEditPageProps = {
   leaseId: string
@@ -128,11 +127,6 @@ function LeaseEditForm({ lease, leaseId }: LeaseEditFormProps) {
   const selectedTenantNames = tenantOptions.filter((t) =>
     selectedTenantIds.includes(t.value)
   )
-
-  const dueDayOptions = Array.from({ length: MAX_DUE_DAY }, (_, i) => ({
-    value: String(i + 1),
-    label: String(i + 1),
-  }))
 
   const onSubmit = async (values: EditLeaseFormValues) => {
     try {
@@ -272,7 +266,7 @@ function LeaseEditForm({ lease, leaseId }: LeaseEditFormProps) {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {dueDayOptions.map((option) => (
+              {DUE_DAY_OPTIONS.map((option) => (
                 <SelectItem key={option.value} value={option.value}>
                   {option.label}
                 </SelectItem>

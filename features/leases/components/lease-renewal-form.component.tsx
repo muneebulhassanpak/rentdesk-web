@@ -23,24 +23,11 @@ import {
   type RenewLeaseFormValues,
   renewLeaseSchema,
 } from "../schemas/lease.schema"
-
-const MAX_DUE_DAY = 28
+import { addOneYear, DUE_DAY_OPTIONS, getNextDay } from "../utils/lease.utils"
 
 type LeaseRenewalFormProps = {
   currentLease: LeaseDetail
   onSubmit: (values: RenewLeaseFormValues) => Promise<void>
-}
-
-function getNextDay(dateStr: string): string {
-  const date = new Date(dateStr)
-  date.setDate(date.getDate() + 1)
-  return date.toISOString().split("T")[0]
-}
-
-function addOneYear(dateStr: string): string {
-  const date = new Date(dateStr)
-  date.setFullYear(date.getFullYear() + 1)
-  return date.toISOString().split("T")[0]
 }
 
 export const LeaseRenewalForm = ({
@@ -69,11 +56,6 @@ export const LeaseRenewalForm = ({
   })
 
   const selectedPaymentDueDay = watch("paymentDueDay")
-
-  const dueDayOptions = Array.from({ length: MAX_DUE_DAY }, (_, i) => ({
-    value: String(i + 1),
-    label: String(i + 1),
-  }))
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="grid gap-6">
@@ -175,7 +157,7 @@ export const LeaseRenewalForm = ({
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {dueDayOptions.map((option) => (
+              {DUE_DAY_OPTIONS.map((option) => (
                 <SelectItem key={option.value} value={option.value}>
                   {option.label}
                 </SelectItem>

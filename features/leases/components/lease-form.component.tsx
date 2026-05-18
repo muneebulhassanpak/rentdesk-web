@@ -28,8 +28,7 @@ import {
   type CreateLeaseFormValues,
   createLeaseSchema,
 } from "../schemas/lease.schema"
-
-const MAX_DUE_DAY = 28
+import { DUE_DAY_OPTIONS } from "../utils/lease.utils"
 
 type LeaseFormProps = {
   onSubmit: (values: CreateLeaseFormValues) => Promise<void>
@@ -75,11 +74,6 @@ export const LeaseForm = ({ onSubmit }: LeaseFormProps) => {
   const selectedTenantNames = tenantOptions.filter((t) =>
     selectedTenantIds.includes(t.value)
   )
-
-  const dueDayOptions = Array.from({ length: MAX_DUE_DAY }, (_, i) => ({
-    value: String(i + 1),
-    label: String(i + 1),
-  }))
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="grid gap-6">
@@ -238,7 +232,7 @@ export const LeaseForm = ({ onSubmit }: LeaseFormProps) => {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {dueDayOptions.map((option) => (
+              {DUE_DAY_OPTIONS.map((option) => (
                 <SelectItem key={option.value} value={option.value}>
                   {option.label}
                 </SelectItem>

@@ -24,9 +24,7 @@ import { LEASE_STATUS_LABELS } from "@/shared/types/lease.types"
 
 import { leaseColumns } from "../components/lease-columns"
 import { useLeases, usePropertyOptions } from "../hooks/use-leases.hook"
-
-const ALL_STATUSES = "all"
-const ALL_PROPERTIES = "all"
+import { ALL_PROPERTIES, ALL_STATUSES } from "../utils/lease.utils"
 
 export default function LeaseListPage() {
   const router = useRouter()
