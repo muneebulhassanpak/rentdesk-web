@@ -1,3 +1,5 @@
+import Link from "next/link"
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -39,8 +41,8 @@ export const PageHeader = ({
                       <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
                     ) : (
                       <>
-                        <BreadcrumbLink href={crumb.href ?? "#"}>
-                          {crumb.label}
+                        <BreadcrumbLink asChild>
+                          <Link href={crumb.href ?? "#"}>{crumb.label}</Link>
                         </BreadcrumbLink>
                         <BreadcrumbSeparator />
                       </>
