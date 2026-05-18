@@ -8,7 +8,7 @@ A production-grade, multi-tenant property management SaaS built with Next.js 16,
 
 **Next.js 16** · **React 19** · **TypeScript** · **Tailwind CSS v4** · **shadcn/ui** · **Radix UI**
 
-[⚡ Tech Stack](#-tech-stack) · [🧱 Architecture](#-architecture) · [🎨 Design System](#-design-system) · [✨ Features](#-features) · [🚀 Getting Started](#-getting-started)
+[⚡ Tech Stack](#-tech-stack) · [🧱 Architecture](#-architecture) · [🎨 Design System](#-design-system) · [✨ Features](#-features) · [🔒 Code Quality](#-code-quality)
 
 </div>
 
@@ -174,56 +174,6 @@ RentDesk uses a bespoke design system built on top of shadcn/ui, inspired by **S
 - Light/dark theme toggle
 - Mobile-optimized sheet navigation
 - Breadcrumb-based page headers
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- **Node.js** >= 18
-- **npm** >= 9
-
-### Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/muneebulhassanpak/rentdesk-web.git
-cd rentdesk-web
-
-# Install dependencies
-npm install
-
-# Set up environment variables
-cp .env.example .env.local
-```
-
-### Development
-
-```bash
-# Start dev server with Turbopack
-npm run dev
-
-# Type checking
-npm run typecheck
-
-# Lint
-npm run lint
-
-# Format
-npm run format
-
-# Run all checks
-npm run check:all
-```
-
-### Build
-
-```bash
-# Production build
-npm run build
-
-# Start production server
-npm start
-```
 
 ## 🔒 Code Quality
 
