@@ -47,7 +47,7 @@ export const getPayments = async (
   query.set("page_size", String(pageSize))
   if (status && status !== "all") query.set("status", status)
   if (propertyId) query.set("property_id", propertyId)
-  if (month) query.set("month", month)
+  if (month) query.set("month", `${month}-01`)
 
   const res = await apiClient<BackendPaginated<Payment>>(
     `${BASE}?${query.toString()}`
@@ -82,7 +82,7 @@ export const waiveLateFee = async (paymentId: string): Promise<Payment> =>
 export const getCollectionSummary = async (
   month?: string
 ): Promise<CollectionSummary> => {
-  const query = month ? `?month=${month}` : ""
+  const query = month ? `?month=${month}-01` : ""
   return apiClient<CollectionSummary>(`${BASE}/summary${query}`)
 }
 
@@ -93,7 +93,7 @@ export const getRentRoll = async (
   propertyId: string,
   month?: string
 ): Promise<RentRoll> => {
-  const query = month ? `?month=${month}` : ""
+  const query = month ? `?month=${month}-01` : ""
   return apiClient<RentRoll>(
     `/api/v1/properties/${propertyId}/rent-roll${query}`
   )
