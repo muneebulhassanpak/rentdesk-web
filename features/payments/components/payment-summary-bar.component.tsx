@@ -13,7 +13,10 @@ type PaymentSummaryBarProps = {
 
 export const PaymentSummaryBar = ({ summary }: PaymentSummaryBarProps) => {
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div
+      data-testid="payment-summary-bar"
+      className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
+    >
       <StatCard
         label="Expected This Month"
         value={formatCurrency(summary.totalExpected)}

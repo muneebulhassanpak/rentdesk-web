@@ -53,7 +53,7 @@ export default function TenantPaymentsPage() {
   )
 
   return (
-    <div className="space-y-6 p-6">
+    <div data-testid="tenant-payments-page" className="space-y-6 p-6">
       <PageHeader
         title="My Payments"
         description="View your payment history and make payments"

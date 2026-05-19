@@ -104,7 +104,7 @@ export default function PaymentDetailPage({
     payment.amountDue + payment.lateFee - payment.amountPaid
 
   return (
-    <div className="space-y-6 p-6">
+    <div data-testid="payment-detail-page" className="space-y-6 p-6">
       <PageHeader
         title={`${payment.tenantName} — ${formatCurrency(payment.amountDue)}`}
         breadcrumbs={[

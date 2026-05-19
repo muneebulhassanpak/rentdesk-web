@@ -16,7 +16,7 @@ type PaymentDetailCardProps = {
 
 export const PaymentDetailCard = ({ payment }: PaymentDetailCardProps) => {
   return (
-    <Card>
+    <Card data-testid="payment-detail-card">
       <CardHeader>
         <CardTitle>Payment Details</CardTitle>
       </CardHeader>

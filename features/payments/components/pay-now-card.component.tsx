@@ -43,7 +43,7 @@ export const PayNowCard = ({ payment }: PayNowCardProps) => {
     payment.status === "overpaid"
 
   return (
-    <Card>
+    <Card data-testid="pay-now-card">
       <CardHeader>
         <CardTitle>{isPaid ? "Payment Complete" : "Payment Due"}</CardTitle>
         <CardDescription>

@@ -88,7 +88,7 @@ export default function PaymentListPage() {
   }
 
   return (
-    <div className="space-y-6 p-6">
+    <div data-testid="payment-list-page" className="space-y-6 p-6">
       <PageHeader
         title="Payments"
         description={`${totalPayments} ${totalPayments === 1 ? "payment" : "payments"} this period`}

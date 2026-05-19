@@ -40,7 +40,7 @@ export const PaymentHistory = ({ payments }: PaymentHistoryProps) => {
   }
 
   return (
-    <Card>
+    <Card data-testid="payment-history">
       <CardHeader>
         <CardTitle>Payment History</CardTitle>
       </CardHeader>

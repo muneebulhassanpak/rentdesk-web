@@ -76,7 +76,7 @@ export const PaymentTimeline = ({
   const steps = getSteps(status, createdAt, dueDate, paidAt)
 
   return (
-    <Card>
+    <Card data-testid="payment-timeline">
       <CardHeader>
         <CardTitle>Payment Timeline</CardTitle>
       </CardHeader>
