@@ -106,9 +106,9 @@ const eslintConfig = defineConfig([
     },
   },
 
-  // ─── Allow process.env only in env config ───
+  // ─── Allow process.env in env config + tooling configs ───
   {
-    files: ["shared/config/env.ts"],
+    files: ["shared/config/env.ts", "*.config.{js,mjs,ts}"],
     rules: {
       "no-restricted-syntax": "off",
     },
@@ -237,6 +237,16 @@ const eslintConfig = defineConfig([
     ],
     rules: {
       "react-hooks/incompatible-library": "off",
+    },
+  },
+
+  // ─── Test files: relax rules ───
+  {
+    files: ["**/*.test.{ts,tsx}", "e2e/**/*.{ts,tsx}", "vitest.setup.ts"],
+    rules: {
+      "no-magic-numbers": "off",
+      "no-restricted-syntax": "off",
+      "import/no-default-export": "off",
     },
   },
 

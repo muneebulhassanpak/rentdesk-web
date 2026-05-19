@@ -21,7 +21,11 @@ export const StatCard = ({
   className,
 }: StatCardProps) => {
   return (
-    <Card size="sm" className={cn("gap-0", className)}>
+    <Card
+      data-testid={`stat-card-${label.toLowerCase().replace(/\s+/g, "-")}`}
+      size="sm"
+      className={cn("gap-0", className)}
+    >
       <CardContent className="flex items-center justify-between">
         <div className="space-y-1">
           <p className="text-xs font-medium text-muted-foreground">{label}</p>

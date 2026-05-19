@@ -29,7 +29,7 @@ export const AppSidebar = () => {
   const navItems = NAVIGATION_MAP[user.role]
 
   return (
-    <Sidebar>
+    <Sidebar data-testid="app-sidebar">
       <SidebarHeader className="border-b border-sidebar-border p-4">
         <Link href={`/${user.role}`} className="flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary">
@@ -57,7 +57,10 @@ export const AppSidebar = () => {
                     pathname.startsWith(item.href))
 
                 return (
-                  <SidebarMenuItem key={item.href}>
+                  <SidebarMenuItem
+                    key={item.href}
+                    data-testid={`nav-item-${item.label.toLowerCase().replace(/\s+/g, "-")}`}
+                  >
                     {item.disabled ? (
                       <SidebarMenuButton
                         disabled

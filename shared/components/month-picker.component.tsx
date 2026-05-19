@@ -23,7 +23,7 @@ export const MonthPicker = ({
 }: MonthPickerProps) => {
   return (
     <Select value={value} onValueChange={onValueChange}>
-      <SelectTrigger className={className}>
+      <SelectTrigger data-testid="month-picker" className={className}>
         <SelectValue placeholder="Select month" />
       </SelectTrigger>
       <SelectContent>
