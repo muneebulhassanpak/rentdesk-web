@@ -7,7 +7,7 @@ test.describe("Auth pages", () => {
       page.getByRole("heading", { name: "Welcome back" })
     ).toBeVisible()
     await expect(page.getByLabel("Email")).toBeVisible()
-    await expect(page.getByLabel("Password")).toBeVisible()
+    await expect(page.getByPlaceholder("Enter your password")).toBeVisible()
     await expect(page.getByRole("button", { name: "Sign in" })).toBeVisible()
   })
 
@@ -23,7 +23,7 @@ test.describe("Auth pages", () => {
   test("login form shows error for invalid email", async ({ page }) => {
     await page.goto("/login")
     await page.getByLabel("Email").fill("not-an-email")
-    await page.getByLabel("Password").fill("password123")
+    await page.getByPlaceholder("Enter your password").fill("password123")
     await page.getByRole("button", { name: "Sign in" }).click()
     await expect(page.getByText("Invalid email address")).toBeVisible()
   })
