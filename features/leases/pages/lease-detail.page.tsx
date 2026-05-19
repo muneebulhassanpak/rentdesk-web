@@ -110,10 +110,6 @@ export default function LeaseDetailPage({ leaseId }: LeaseDetailPageProps) {
 
       <LeaseTimeline startDate={lease.startDate} endDate={lease.endDate} />
 
-      <div className="rounded-lg border border-dashed py-12 text-center text-sm text-muted-foreground">
-        Payment history will be available in a future sprint.
-      </div>
-
       <LeaseTerminationDialog
         open={isTerminateOpen}
         onOpenChange={setIsTerminateOpen}
