@@ -30,6 +30,12 @@ export const LEASE_ROUTES = {
   RENEW: (id: string) => `/leases/${id}/renew`,
 } as const
 
+export const PAYMENT_ROUTES = {
+  LIST: "/payments",
+  DETAIL: (id: string) => `/payments/${id}`,
+  TENANT_PAYMENTS: "/tenant/payments",
+} as const
+
 export const ROLE_DASHBOARD_MAP: Record<Role, string> = {
   landlord: DASHBOARD_ROUTES.LANDLORD,
   manager: DASHBOARD_ROUTES.MANAGER,
