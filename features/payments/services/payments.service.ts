@@ -99,6 +99,23 @@ export const getRentRoll = async (
   )
 }
 
+// ─── Lookup helpers for filters ──────────────────────────────────────────────
+
+type OptionItem = { value: string; label: string }
+type PropertyListItem = { id: string; name: string }
+
+type BackendPaginatedSimple<T> = {
+  items: T[]
+  meta: { page: number; pageSize: number; total: number; totalPages: number }
+}
+
+export const getPropertyOptions = async (): Promise<OptionItem[]> => {
+  const res = await apiClient<BackendPaginatedSimple<PropertyListItem>>(
+    "/api/v1/properties?page_size=100"
+  )
+  return res.items.map((p) => ({ value: p.id, label: p.name }))
+}
+
 export const createStripeCheckout = async (
   paymentId: string
 ): Promise<{ checkoutUrl: string }> =>

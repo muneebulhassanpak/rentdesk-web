@@ -16,11 +16,14 @@ import {
   getPayment,
   getPayments,
   type GetPaymentsParams,
+  getPropertyOptions,
   getRentRoll,
   recordPayment,
   waiveLateFee,
   waivePayment,
 } from "../services/payments.service"
+
+type OptionItem = { value: string; label: string }
 
 export const paymentKeys = {
   all: ["payments"] as const,
@@ -34,6 +37,7 @@ export const paymentKeys = {
     [...paymentKeys.all, "lease", leaseId] as const,
   rentRoll: (propertyId: string, month?: string) =>
     [...paymentKeys.all, "rentRoll", propertyId, month] as const,
+  propertyOptions: () => [...paymentKeys.all, "propertyOptions"] as const,
 }
 
 // ─── Queries ─────────────────────────────────────────────────────────────────
@@ -70,6 +74,12 @@ export const useRentRoll = (propertyId: string, month?: string) =>
     queryKey: paymentKeys.rentRoll(propertyId, month),
     queryFn: () => getRentRoll(propertyId, month),
     enabled: !!propertyId,
+  })
+
+export const usePropertyOptions = () =>
+  useQuery<OptionItem[]>({
+    queryKey: paymentKeys.propertyOptions(),
+    queryFn: getPropertyOptions,
   })
 
 // ─── Mutations ───────────────────────────────────────────────────────────────
