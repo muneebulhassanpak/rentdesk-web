@@ -29,12 +29,7 @@ const LANDLORD_NAV: NavItem[] = [
   { label: "Properties", href: "/properties", icon: Building2 },
   { label: "Tenants", href: "/tenants", icon: Users },
   { label: "Leases", href: "/leases", icon: ClipboardList },
-  {
-    label: "Payments",
-    href: "/landlord/payments",
-    icon: CreditCard,
-    disabled: true,
-  },
+  { label: "Payments", href: "/payments", icon: CreditCard },
   {
     label: "Maintenance",
     href: "/landlord/maintenance",
@@ -79,12 +74,7 @@ const MANAGER_NAV: NavItem[] = [
   { label: "Properties", href: "/properties", icon: Building2 },
   { label: "Tenants", href: "/tenants", icon: Users },
   { label: "Leases", href: "/leases", icon: ClipboardList },
-  {
-    label: "Payments",
-    href: "/manager/payments",
-    icon: CreditCard,
-    disabled: true,
-  },
+  { label: "Payments", href: "/payments", icon: CreditCard },
   {
     label: "Maintenance",
     href: "/manager/maintenance",
@@ -120,12 +110,7 @@ const TENANT_NAV: NavItem[] = [
     icon: ClipboardList,
     disabled: true,
   },
-  {
-    label: "Payments",
-    href: "/tenant/payments",
-    icon: CreditCard,
-    disabled: true,
-  },
+  { label: "Payments", href: "/tenant/payments", icon: CreditCard },
   {
     label: "Maintenance",
     href: "/tenant/maintenance",

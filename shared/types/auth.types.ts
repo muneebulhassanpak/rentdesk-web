@@ -15,6 +15,7 @@ export type User = {
   orgId: string
   orgName?: string
   avatarUrl?: string
+  leaseId?: string
   isEmailVerified: boolean
   totpEnabled: boolean
 }
